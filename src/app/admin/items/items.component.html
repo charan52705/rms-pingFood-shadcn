@@ -1,0 +1,90 @@
+<div class="max-w-2xl mx-auto p-4 bg-white items-center justify-center flex flex-col h-[100vh]">
+    <!-- Header Section -->
+    <div class="w-full text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Add New Item</h1>
+      <p class="mt-2 text-gray-600">Please provide the details of the new item.</p>
+    </div>
+  
+    <!-- Form Section -->
+    <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="space-y-6 w-full max-w-xl mx-auto">
+      <!-- Item Name -->
+      <div class="form-group">
+        <label for="itemName" class="block text-lg font-semibold text-gray-700">Item Name</label>
+        <input 
+          id="itemName" 
+          formControlName="itemName" 
+          type="text" 
+          placeholder="Example Item" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="itemForm.controls['itemName'].invalid && itemForm.controls['itemName'].touched" class="text-sm text-red-500">
+          Item Name is required and should be at least 2 characters long.
+        </div>
+      </div>
+  
+      <!-- Item Description -->
+      <div class="form-group">
+        <label for="itemDescription" class="block text-lg font-semibold text-gray-700">Item Description</label>
+        <textarea 
+          id="itemDescription" 
+          formControlName="itemDescription" 
+          placeholder="Describe the item" 
+          rows="4" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"></textarea>
+        <div *ngIf="itemForm.controls['itemDescription'].invalid && itemForm.controls['itemDescription'].touched" class="text-sm text-red-500">
+          Item Description is required and should be at least 10 characters long.
+        </div>
+      </div>
+  
+      <!-- Item Price -->
+      <div class="form-group">
+        <label for="itemPrice" class="block text-lg font-semibold text-gray-700">Item Price</label>
+        <input 
+          id="itemPrice" 
+          formControlName="itemPrice" 
+          type="text" 
+          placeholder="99.99" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="itemForm.controls['itemPrice'].invalid && itemForm.controls['itemPrice'].touched" class="text-sm text-red-500">
+          Price is required and must be a valid number with up to two decimal places.
+        </div>
+      </div>
+  
+      <!-- Item Category -->
+      <div class="form-group">
+        <label for="itemCategory" class="block text-lg font-semibold text-gray-700">Item Category</label>
+        <input 
+          id="itemCategory" 
+          formControlName="itemCategory" 
+          type="text" 
+          placeholder="Electronics" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="itemForm.controls['itemCategory'].invalid && itemForm.controls['itemCategory'].touched" class="text-sm text-red-500">
+          Category is required and should be at least 2 characters long.
+        </div>
+      </div>
+  
+      <!-- Item Quantity -->
+      <div class="form-group">
+        <label for="itemQuantity" class="block text-lg font-semibold text-gray-700">Item Quantity</label>
+        <input 
+          id="itemQuantity" 
+          formControlName="itemQuantity" 
+          type="number" 
+          placeholder="1" 
+          min="1" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="itemForm.controls['itemQuantity'].invalid && itemForm.controls['itemQuantity'].touched" class="text-sm text-red-500">
+          Quantity is required and must be at least 1.
+        </div>
+      </div>
+  
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        [disabled]="isSubmitting" 
+        class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 hover:bg-black disabled:bg-black">
+        {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+      </button>
+    </form>
+  </div>
+  

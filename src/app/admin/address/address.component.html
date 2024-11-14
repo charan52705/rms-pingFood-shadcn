@@ -1,0 +1,101 @@
+<div class="max-w-2xl mx-auto p-4 bg-white items-center justify-center flex flex-col h-auto sm:h-[100vh]">
+    <!-- Header Section -->
+    <div class="w-full text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Add New Address</h1>
+      <p class="mt-2 text-gray-600">Please provide your address details below.</p>
+    </div>
+  
+    <!-- Form Section -->
+    <form [formGroup]="addressForm" (ngSubmit)="onSubmit()" class="space-y-6 w-full max-w-xl mx-auto">
+      <!-- Full Name -->
+      <div class="form-group">
+        <label for="fullName" class="block text-lg font-semibold text-gray-700">Full Name</label>
+        <input 
+          id="fullName" 
+          formControlName="fullName" 
+          type="text" 
+          placeholder="John Doe" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="addressForm.controls['fullName'].invalid && addressForm.controls['fullName'].touched" class="text-sm text-red-500">
+          Full Name is required and should be at least 2 characters long.
+        </div>
+      </div>
+  
+      <!-- Address Line 1 -->
+      <div class="form-group">
+        <label for="addressLine1" class="block text-lg font-semibold text-gray-700">Address Line 1</label>
+        <input 
+          id="addressLine1" 
+          formControlName="addressLine1" 
+          type="text" 
+          placeholder="123 Main St" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="addressForm.controls['addressLine1'].invalid && addressForm.controls['addressLine1'].touched" class="text-sm text-red-500">
+          Address Line 1 is required and should be at least 5 characters long.
+        </div>
+      </div>
+  
+      <!-- Address Line 2 -->
+      <div class="form-group">
+        <label for="addressLine2" class="block text-lg font-semibold text-gray-700">Address Line 2 (Optional)</label>
+        <input 
+          id="addressLine2" 
+          formControlName="addressLine2" 
+          type="text" 
+          placeholder="Apt 4B" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+      </div>
+  
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- City -->
+        <div class="form-group">
+          <label for="city" class="block text-lg font-semibold text-gray-700">City</label>
+          <input 
+            id="city" 
+            formControlName="city" 
+            type="text" 
+            placeholder="New York" 
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+          <div *ngIf="addressForm.controls['city'].invalid && addressForm.controls['city'].touched" class="text-sm text-red-500">
+            City is required and should be at least 2 characters long.
+          </div>
+        </div>
+  
+        <!-- State -->
+        <div class="form-group">
+          <label for="state" class="block text-lg font-semibold text-gray-700">State</label>
+          <input 
+            id="state" 
+            formControlName="state" 
+            type="text" 
+            placeholder="NY" 
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+          <div *ngIf="addressForm.controls['state'].invalid && addressForm.controls['state'].touched" class="text-sm text-red-500">
+            State is required and should be at least 2 characters long.
+          </div>
+        </div>
+      </div>
+  
+      <!-- Zip Code -->
+      <div class="form-group">
+        <label for="zipCode" class="block text-lg font-semibold text-gray-700">Zip Code</label>
+        <input 
+          id="zipCode" 
+          formControlName="zipCode" 
+          type="text" 
+          placeholder="12345" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="addressForm.controls['zipCode'].invalid && addressForm.controls['zipCode'].touched" class="text-sm text-red-500">
+          Invalid Zip Code format.
+        </div>
+      </div>
+  
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        [disabled]="isSubmitting" 
+        class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 hover:bg-black disabled:bg-black">
+        {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+      </button>
+    </form>
+  </div>

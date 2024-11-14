@@ -1,0 +1,61 @@
+<div class="max-w-2xl mx-auto p-4 bg-white items-center justify-center flex flex-col h-[100vh]">
+    <!-- Header Section -->
+    <div class="w-full text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Add New Unit</h1>
+      <p class="mt-2 text-gray-600">Please provide the details of the new unit.</p>
+    </div>
+  
+    <!-- Form Section -->
+    <form [formGroup]="unitForm" (ngSubmit)="onSubmit()" class="space-y-6 w-full max-w-xl mx-auto">
+      <!-- Unit Name -->
+      <div class="form-group">
+        <label for="unitName" class="block text-lg font-semibold text-gray-700">Unit Name</label>
+        <input 
+          id="unitName" 
+          formControlName="unitName" 
+          type="text" 
+          placeholder="Main Unit" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="unitForm.controls['unitName'].invalid && unitForm.controls['unitName'].touched" class="text-sm text-red-500">
+          Unit Name is required and should be at least 3 characters long.
+        </div>
+      </div>
+  
+      <!-- Unit Abbreviation -->
+      <div class="form-group">
+        <label for="unitAbbreviation" class="block text-lg font-semibold text-gray-700">Unit Abbreviation</label>
+        <input 
+          id="unitAbbreviation" 
+          formControlName="unitAbbreviation" 
+          type="text" 
+          placeholder="MU" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="unitForm.controls['unitAbbreviation'].invalid && unitForm.controls['unitAbbreviation'].touched" class="text-sm text-red-500">
+          Unit Abbreviation is required and should be alphanumeric (1-5 characters).
+        </div>
+      </div>
+  
+      <!-- Associated State -->
+      <div class="form-group">
+        <label for="associatedState" class="block text-lg font-semibold text-gray-700">Associated State</label>
+        <input 
+          id="associatedState" 
+          formControlName="associatedState" 
+          type="text" 
+          placeholder="California" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="unitForm.controls['associatedState'].invalid && unitForm.controls['associatedState'].touched" class="text-sm text-red-500">
+          Associated State is required and should be at least 3 characters long.
+        </div>
+      </div>
+  
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        [disabled]="isSubmitting" 
+        class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 hover:bg-black disabled:bg-black">
+        {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+      </button>
+    </form>
+  </div>
+  

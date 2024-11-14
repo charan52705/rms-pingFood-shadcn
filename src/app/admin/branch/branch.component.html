@@ -1,0 +1,75 @@
+<div class="max-w-2xl mx-auto p-4 bg-white items-center justify-center flex flex-col h-[100vh]">
+    <!-- Header Section -->
+    <div class="w-full text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Add New Branch</h1>
+      <p class="mt-2 text-gray-600">Please provide the details of the new branch.</p>
+    </div>
+  
+    <!-- Form Section -->
+    <form [formGroup]="branchForm" (ngSubmit)="onSubmit()" class="space-y-6 w-full max-w-xl mx-auto">
+      <!-- Branch Name -->
+      <div class="form-group">
+        <label for="branchName" class="block text-lg font-semibold text-gray-700">Branch Name</label>
+        <input 
+          id="branchName" 
+          formControlName="branchName" 
+          type="text" 
+          placeholder="Main Branch" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="branchForm.controls['branchName'].invalid && branchForm.controls['branchName'].touched" class="text-sm text-red-500">
+          Branch Name is required and should be at least 2 characters long.
+        </div>
+      </div>
+  
+      <!-- Branch Location -->
+      <div class="form-group">
+        <label for="branchLocation" class="block text-lg font-semibold text-gray-700">Branch Location</label>
+        <input 
+          id="branchLocation" 
+          formControlName="branchLocation" 
+          type="text" 
+          placeholder="New York City, NY" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="branchForm.controls['branchLocation'].invalid && branchForm.controls['branchLocation'].touched" class="text-sm text-red-500">
+          Branch Location is required and should be at least 3 characters long.
+        </div>
+      </div>
+  
+      <!-- Branch Address -->
+      <div class="form-group">
+        <label for="branchAddress" class="block text-lg font-semibold text-gray-700">Branch Address</label>
+        <input 
+          id="branchAddress" 
+          formControlName="branchAddress" 
+          type="text" 
+          placeholder="123 Main St, Suite 101" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="branchForm.controls['branchAddress'].invalid && branchForm.controls['branchAddress'].touched" class="text-sm text-red-500">
+          Branch Address is required and should be at least 5 characters long.
+        </div>
+      </div>
+  
+      <!-- Contact Number -->
+      <div class="form-group">
+        <label for="contactNumber" class="block text-lg font-semibold text-gray-700">Contact Number</label>
+        <input 
+          id="contactNumber" 
+          formControlName="contactNumber" 
+          type="text" 
+          placeholder="(123) 456-7890" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="branchForm.controls['contactNumber'].invalid && branchForm.controls['contactNumber'].touched" class="text-sm text-red-500">
+          A valid contact number is required.
+        </div>
+      </div>
+  
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        [disabled]="isSubmitting" 
+        class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 hover:bg-black disabled:bg-black">
+        {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+      </button>
+    </form>
+  </div>
+  

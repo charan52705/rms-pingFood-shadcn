@@ -1,0 +1,75 @@
+<div class="max-w-2xl mx-auto p-4 bg-white items-center justify-center flex flex-col h-[100vh]">
+    <!-- Header Section -->
+    <div class="w-full text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Add New City</h1>
+      <p class="mt-2 text-gray-600">Please provide the details of the new city.</p>
+    </div>
+  
+    <!-- Form Section -->
+    <form [formGroup]="cityForm" (ngSubmit)="onSubmit()" class="space-y-6 w-full max-w-xl mx-auto">
+      <!-- City Name -->
+      <div class="form-group">
+        <label for="cityName" class="block text-lg font-semibold text-gray-700">City Name</label>
+        <input 
+          id="cityName" 
+          formControlName="cityName" 
+          type="text" 
+          placeholder="New York" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="cityForm.controls['cityName'].invalid && cityForm.controls['cityName'].touched" class="text-sm text-red-500">
+          City Name is required and should be at least 2 characters long.
+        </div>
+      </div>
+  
+      <!-- City State -->
+      <div class="form-group">
+        <label for="cityState" class="block text-lg font-semibold text-gray-700">State</label>
+        <input 
+          id="cityState" 
+          formControlName="cityState" 
+          type="text" 
+          placeholder="NY" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="cityForm.controls['cityState'].invalid && cityForm.controls['cityState'].touched" class="text-sm text-red-500">
+          State is required and should be at least 2 characters long.
+        </div>
+      </div>
+  
+      <!-- City Country -->
+      <div class="form-group">
+        <label for="cityCountry" class="block text-lg font-semibold text-gray-700">Country</label>
+        <input 
+          id="cityCountry" 
+          formControlName="cityCountry" 
+          type="text" 
+          placeholder="United States" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="cityForm.controls['cityCountry'].invalid && cityForm.controls['cityCountry'].touched" class="text-sm text-red-500">
+          Country is required and should be at least 2 characters long.
+        </div>
+      </div>
+  
+      <!-- Postal Code -->
+      <div class="form-group">
+        <label for="postalCode" class="block text-lg font-semibold text-gray-700">Postal Code</label>
+        <input 
+          id="postalCode" 
+          formControlName="postalCode" 
+          type="text" 
+          placeholder="10001" 
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+        <div *ngIf="cityForm.controls['postalCode'].invalid && cityForm.controls['postalCode'].touched" class="text-sm text-red-500">
+          Invalid Postal Code format.
+        </div>
+      </div>
+  
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        [disabled]="isSubmitting" 
+        class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 hover:bg-black disabled:bg-black">
+        {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+      </button>
+    </form>
+  </div>
+  
