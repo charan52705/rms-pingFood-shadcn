@@ -1,0 +1,58 @@
+<div class="flex h-screen bg-background">
+    <!-- Sidebar for larger screens -->
+    <aside class="hidden lg:flex w-64 flex-col border-r">
+      <div class="p-4 border-b">
+        <h1 class="text-2xl font-bold">Ping Food</h1>
+      </div>
+      <div class="flex-1 overflow-auto">
+        <nav class="p-4 space-y-2">
+          <button
+            *ngFor="let item of navItems; let i = index"
+            [class.bg-secondary]="activeComponent === item.component"
+            class="w-full justify-start flex items-center p-2 space-x-2"
+            (click)="setActiveComponent(item.component)">
+            <i [class]="item.icon" class="mr-2 w-4 h-4"></i>
+            <span>{{ item.label }}</span>
+          </button>
+        </nav>
+      </div>
+    </aside>
+    
+    <!-- Mobile sidebar -->
+    <div *ngIf="isMobileSidebarOpen" class="lg:hidden fixed inset-0 z-50 bg-black bg-opacity-50">
+      <div class="absolute left-0 top-0 w-64 bg-white h-full">
+        <div class="p-4 border-b">
+          <h1 class="text-2xl font-bold">Ping Food</h1>
+        </div>
+        <div class="h-[calc(100vh-5rem)] overflow-auto">
+          <nav class="p-4 space-y-2">
+            <button class="w-full justify-start flex items-center p-2 space-x-2"> <i class="fa-solid fa-suer" class="mr-2 w-4 h-4"></i>
+              <span>Name</span> </button>
+            <button
+              *ngFor="let item of navItems; let i = index"
+              [class.bg-secondary]="activeComponent === item.component"
+              class="w-full justify-start flex items-center p-2 space-x-2"
+              (click)="setActiveComponent(item.component); closeMobileSidebar()">
+              <i [class]="item.icon" class="mr-2 w-4 h-4"></i>
+              <span>{{ item.label }}</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main content area -->
+    <main class="flex-1 p-6 overflow-auto">
+      <div class="max-w-4xl mx-auto">
+        <ng-container *ngIf="activeComponent">
+          <ng-container *ngComponentOutlet="activeComponent"></ng-container>
+        </ng-container>
+      </div>
+    </main>
+    
+    <!-- Button to toggle mobile sidebar -->
+    <button (click)="toggleMobileSidebar()" class="lg:hidden absolute left-4 top-4">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
+  

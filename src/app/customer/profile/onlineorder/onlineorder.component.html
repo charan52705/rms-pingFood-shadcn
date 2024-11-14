@@ -1,0 +1,47 @@
+<div class="flex items-center justify-center min-h-screen">
+  <div class="w-full max-w-3xl p-6 bg-white ">
+    <h2 class="text-2xl font-bold text-center mb-6">Online Order</h2>
+
+    <div class="overflow-auto h-[calc(100vh-15rem)]">
+      <div *ngFor="let item of menuItems" class="bg-white border-2 border-gray-100 rounded-lg mb-4">
+        <div class="p-4">
+          <h3 class="text-xl font-semibold">{{ item.name }}</h3>
+        </div>
+        <div class="p-4 flex justify-between items-center">
+          <span class="font-bold">${{ item.price.toFixed(2) }}</span>
+          <div class="flex items-center space-x-2">
+            <button
+              (click)="removeFromOrder(item.id)"
+              class="py-2 px-3 border border-gray-300 hover:bg-gray-100"
+            >
+              <i class="fa-solid fa-minus"></i>
+            </button>
+            <span>{{ order[item.id] || 0 }}</span>
+            <button
+              (click)="addToOrder(item.id)"
+              class="py-2 px-3 border border-gray-300 hover:bg-gray-100"
+            >
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Section -->
+    <div class="bg-white shadow-md rounded-lg mb-4">
+      <div class="p-4 flex justify-between items-center py-4">
+        <span class="font-bold">Total:</span>
+        <span class="font-bold text-lg">${{ total }}</span>
+      </div>
+    </div>
+
+    <!-- Place Order Button -->
+    <button
+      (click)="placeOrder()"
+      class="w-full py-2 bg-black text-white rounded-lg hover:bg-black"
+    >
+      Place Order
+    </button>
+  </div>
+</div>

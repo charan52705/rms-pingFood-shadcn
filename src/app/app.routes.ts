@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { AdminGuard } from './guards/admin.guard';  // Import the guard
 import { CustomerGuard } from './guards/customer.guard';  // Import the guard
+import { ProfileComponent } from './customer/profile/profile.component';
 
 export const routes: Routes = [
   // Customer Routes
@@ -29,4 +30,6 @@ export const routes: Routes = [
   // Common Routes
   { path: 'find/food', loadComponent: () => import('./common/find-food/find-food.component').then(m => m.FindFoodComponent) },
   { path: 'find/hotel', loadComponent: () => import('./common/find-hotel/find-hotel.component').then(m => m.FindHotelComponent) },
+
+  {path:'profile', component:ProfileComponent}
 ];

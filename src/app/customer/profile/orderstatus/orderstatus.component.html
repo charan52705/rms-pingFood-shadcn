@@ -1,0 +1,24 @@
+<div class="flex items-center justify-center min-h-screen">
+  <div class="w-full max-w-3xl p-6">
+    <h2 class="text-2xl font-bold text-center mb-6">Order Status</h2>
+    <div *ngFor="let order of orders" class="bg-white border-2 border-gray-100 rounded-lg mb-4">
+      <div class="p-4 flex justify-between items-center">
+        <span class="text-lg font-semibold">Order #{{ order.id }}</span>
+        <span
+          class="px-3 py-1 rounded-full text-xs font-semibold"
+          [ngClass]="{
+            'bg-green-200 text-green-800': order.status === 'Delivered',
+            'bg-yellow-200 text-yellow-800': order.status === 'In Progress',
+            'bg-blue-200 text-blue-800': order.status === 'Preparing',
+            'bg-gray-200 text-gray-800': order.status !== 'Delivered' && order.status !== 'In Progress' && order.status !== 'Preparing'
+          }">
+          {{ order.status }}
+        </span>
+      </div>
+      <div class="p-4">
+        <p class="font-semibold">{{ order.restaurant }}</p>
+        <p class="text-sm text-gray-600">{{ order.items.join(', ') }}</p>
+      </div>
+    </div>
+  </div>
+</div>

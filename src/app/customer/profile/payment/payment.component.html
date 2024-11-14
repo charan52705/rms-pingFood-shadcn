@@ -1,0 +1,102 @@
+<div class="flex items-center justify-center min-h-screen">
+  <div class="space-y-4 w-full max-w-lg p-6 bg-white">
+    <h2 class="text-2xl font-bold text-center">Payment</h2>
+
+    <form (ngSubmit)="handleSubmit()" class="space-y-4">
+      
+      <!-- Payment Method Selection -->
+      <div class="space-y-2">
+        <label class="block font-medium">Payment Method</label>
+        <div class="space-y-2">
+          <div class="flex items-center space-x-2">
+            <!-- Native Radio Button for Credit Card -->
+            <input
+              type="radio"
+              id="credit"
+              name="paymentMethod"
+              value="credit"
+              [(ngModel)]="paymentMethod"
+              class="payment-radio h-5 w-5 text-black"
+            />
+            <label for="credit" class="cursor-pointer">Credit Card</label>
+          </div>
+          <div class="flex items-center space-x-2">
+            <!-- Native Radio Button for Debit Card -->
+            <input
+              type="radio"
+              id="debit"
+              name="paymentMethod"
+              value="debit"
+              [(ngModel)]="paymentMethod"
+              class="payment-radio h-5 w-5 text-black"
+            />
+            <label for="debit" class="cursor-pointer">Debit Card</label>
+          </div>
+          <div class="flex items-center space-x-2">
+            <!-- Native Radio Button for PayPal -->
+            <input
+              type="radio"
+              id="paypal"
+              name="paymentMethod"
+              value="paypal"
+              [(ngModel)]="paymentMethod"
+              class="payment-radio h-5 w-5 text-black"
+            />
+            <label for="paypal" class="cursor-pointer">PayPal</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Credit/Debit Card Form Fields -->
+      <div *ngIf="paymentMethod === 'credit' || paymentMethod === 'debit'">
+        <div class="space-y-2">
+          <label for="cardNumber" class="block font-medium">Card Number</label>
+          <input
+            type="text"
+            id="cardNumber"
+            [(ngModel)]="cardNumber"
+            name="cardNumber"
+            placeholder="1234 5678 9012 3456"
+            class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+            required
+          />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label for="expiry" class="block font-medium">Expiry Date</label>
+            <input
+              type="text"
+              id="expiry"
+              [(ngModel)]="expiry"
+              name="expiry"
+              placeholder="MM/YY"
+              class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              required
+            />
+          </div>
+          <div class="space-y-2">
+            <label for="cvv" class="block font-medium">CVV</label>
+            <input
+              type="text"
+              id="cvv"
+              [(ngModel)]="cvv"
+              name="cvv"
+              placeholder="123"
+              class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              required
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="w-full py-2 bg-black text-white rounded-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-black"
+      >
+        Pay Now
+      </button>
+    </form>
+  </div>
+</div>

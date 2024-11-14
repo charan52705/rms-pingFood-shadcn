@@ -1,0 +1,24 @@
+/* Custom Radio Button Styling */
+.payment-radio {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border-radius: 50%; /* Make it circular */
+    border: 2px solid black; /* Default border color */
+    width: 20px; /* Default size of a radio button */
+    height: 20px; /* Default size of a radio button */
+    background-color: white; /* Background is white by default */
+    transition: background-color 0.2s ease, border-color 0.2s ease; /* Smooth transition */
+    display: inline-block;
+  }
+  
+  .payment-radio:checked {
+    background-color: black; /* Black fill when checked */
+    border-color: black; /* Black border when checked */
+  }
+  
+  .payment-radio:focus {
+    outline: none; /* Remove default outline on focus */
+    border-color: #444; /* Darker border color on focus */
+  }
+  
