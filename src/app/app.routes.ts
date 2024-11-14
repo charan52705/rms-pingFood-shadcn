@@ -15,14 +15,14 @@ import { UnitsComponent } from './admin/units/units.component';
 
 
 export const routes: Routes = [
-    {path:'', component:HomeComponent},
-    {path:'auth/register', component: RegistrationComponent  },
-    {path:'auth/login', component:LoginComponent},
-    {path:'address', component:AddressComponent},
-    {path: 'branch', component:BranchComponent},
-    {path: 'cities', component: CitiesComponent},
-    {path:'items', component:ItemsComponent}, 
-    {path:'menu', component:MenuComponent}, 
-    {path: 'restaurant', component: RestaurantComponent},
-    {path:'units', component:UnitsComponent}
+    { path: '', loadComponent: () => import('./home/home.component').then(m => m.HomeComponent) },
+  { path: 'admin/register', loadComponent: () => import('./admin/registration/registration.component').then(m => m.RegistrationComponent) },
+  { path: 'admin/login', loadComponent: () => import('./admin/login/login.component').then(m => m.LoginComponent) },
+  { path: 'admin/address', loadComponent: () => import('./admin/address/address.component').then(m => m.AddressComponent) },
+  { path: 'admin/branch', loadComponent: () => import('./admin/branch/branch.component').then(m => m.BranchComponent) },
+  { path: 'admin/cities', loadComponent: () => import('./admin/cities/cities.component').then(m => m.CitiesComponent) },
+  { path: 'admin/items', loadComponent: () => import('./admin/items/items.component').then(m => m.ItemsComponent) },
+  { path: 'admin/menu', loadComponent: () => import('./admin/menu/menu.component').then(m => m.MenuComponent) },
+  { path: 'admin/restaurant', loadComponent: () => import('./admin/restaurant/restaurant.component').then(m => m.RestaurantComponent) },
+  { path: 'admin/units', loadComponent: () => import('./admin/units/units.component').then(m => m.UnitsComponent) }
 ];
