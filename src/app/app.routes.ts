@@ -19,7 +19,7 @@ export const routes: Routes = [
   { path: 'admin/register', loadComponent: () => import('./admin/registration/registration.component').then(m => m.RegistrationComponent) },
   { path: 'admin/login', loadComponent: () => import('./admin/login/login.component').then(m => m.LoginComponent) },
   { path: 'admin/address', loadComponent: () => import('./admin/address/address.component').then(m => m.AddressComponent) },
-  { path: 'admin/branch', loadComponent: () => import('./admin/branch/branch.component').then(m => m.BranchComponent) },
+  { path: 'admin/branches', loadComponent: () => import('./admin/branch/branch.component').then(m => m.BranchComponent) },
   { path: 'admin/cities', loadComponent: () => import('./admin/cities/cities.component').then(m => m.CitiesComponent) },
   { path: 'admin/items', loadComponent: () => import('./admin/items/items.component').then(m => m.ItemsComponent) },
   { path: 'admin/menu', loadComponent: () => import('./admin/menu/menu.component').then(m => m.MenuComponent) },
@@ -31,8 +31,7 @@ export const routes: Routes = [
   { path: 'common/login', loadComponent: () => import('./common/login/login.component').then(m => m.LoginComponent) },
   { path: 'customer/register', loadComponent: () => import('./customer/register/register.component').then(m => m.RegisterComponent) },
   { path: 'customer/home', loadComponent: () => import('./customer/register/register.component').then(m => m.RegisterComponent) },
-
-
-
-
+  { path: 'admin/customers', loadComponent: () => import('./admin/customers/customers.component').then(m => m.CustomersComponent) },
+  { path: 'admin/orders', loadComponent: () => import('./admin/orders/orders.component').then(m => m.OrdersComponent) },
+  { path: 'admin/payments', loadComponent: () => import('./admin/track-orders/track-orders.component').then(m => m.TrackOrdersComponent) },
 ];

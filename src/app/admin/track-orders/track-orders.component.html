@@ -1,0 +1,112 @@
+<div class="max-w-4xl mx-auto p-6 bg-white flex items-center justify-center flex-col h-full">
+    <!-- Header Section -->
+    <div class="w-full text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Track Orders & Payments</h1>
+      <p class="mt-2 text-gray-600">Track order status and manage payments.</p>
+    </div>
+  
+    <!-- Mobile Menu Icon (visible on small screens) -->
+    <div class="md:hidden flex justify-end w-full mb-4">
+      <button (click)="toggleMenu()" class="text-2xl">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  
+    <!-- Mobile Menu (Hidden by default, shown when clicked) -->
+    <div *ngIf="isMenuOpen" class="w-full md:hidden space-y-4 bg-white shadow-md p-4 rounded-lg">
+      <button (click)="setActiveTab('trackOrder')" class="block text-lg font-medium text-gray-700 hover:text-black">
+        Track Order
+      </button>
+      <button (click)="setActiveTab('payment')" class="block text-lg font-medium text-gray-700 hover:text-black">
+        Payments
+      </button>
+    </div>
+  
+    <!-- Tabs Section (visible on larger screens) -->
+    <div class="w-full hidden md:flex flex-col items-center">
+      <!-- Tab Headers -->
+      <div class="flex justify-center space-x-4 border-b">
+        <button (click)="setActiveTab('trackOrder')" [class]="tabClass('trackOrder')" class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black">
+          Track Order
+        </button>
+        <button (click)="setActiveTab('payment')" [class]="tabClass('payment')" class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black">
+          Payments
+        </button>
+      </div>
+    </div>
+  
+    <!-- Tab Contents -->
+    <div class="tabs-content mt-8 space-y-8 w-full">
+      <!-- Track Order Tab -->
+      <div *ngIf="activeTab === 'trackOrder'" class="tab-content w-full md:w-3/4 mx-auto">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Track Order</h2>
+        <form [formGroup]="trackOrderForm" (ngSubmit)="trackOrder()" class="space-y-6">
+          <div class="form-group">
+            <label for="orderId" class="block text-lg font-semibold text-gray-700">Order ID</label>
+            <input
+              id="orderId"
+              formControlName="orderId"
+              type="text"
+              placeholder="Enter Order ID"
+              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            />
+            <div *ngIf="trackOrderForm.controls['orderId'].invalid && trackOrderForm.controls['orderId'].touched" class="text-sm text-red-500">
+              Order ID is required.
+            </div>
+          </div>
+          <button type="submit" [disabled]="isSubmitting" class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold">
+            {{ isSubmitting ? 'Tracking...' : 'Track Order' }}
+          </button>
+        </form>
+  
+        <div *ngIf="orderStatus">
+          <h3 class="text-xl font-semibold text-gray-800 mt-6">Order Status</h3>
+          <p class="text-lg text-gray-600">Status: {{ orderStatus.status }}</p>
+          <p class="text-lg text-gray-600">Last Updated: {{ orderStatus.lastUpdated }}</p>
+          <p *ngIf="orderStatus.shipmentDetails" class="text-lg text-gray-600">Shipment Details: {{ orderStatus.shipmentDetails }}</p>
+        </div>
+      </div>
+  
+      <!-- Payments Tab -->
+      <div *ngIf="activeTab === 'payment'" class="tab-content w-full md:w-3/4 mx-auto">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Payments</h2>
+        <form [formGroup]="paymentForm" (ngSubmit)="processPayment()" class="space-y-6">
+          <div class="form-group">
+            <label for="paymentAmount" class="block text-lg font-semibold text-gray-700">Payment Amount</label>
+            <input
+              id="paymentAmount"
+              formControlName="paymentAmount"
+              type="number"
+              placeholder="Enter Payment Amount"
+              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            />
+            <div *ngIf="paymentForm.controls['paymentAmount'].invalid && paymentForm.controls['paymentAmount'].touched" class="text-sm text-red-500">
+              Payment amount is required and should be a positive number.
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="paymentMethod" class="block text-lg font-semibold text-gray-700">Payment Method</label>
+            <select id="paymentMethod" formControlName="paymentMethod" class="form-input w-full p-3 border border-gray-300 rounded-lg">
+              <option value="creditCard">Credit Card</option>
+              <option value="paypal">PayPal</option>
+              <option value="bankTransfer">Bank Transfer</option>
+            </select>
+            <div *ngIf="paymentForm.controls['paymentMethod'].invalid && paymentForm.controls['paymentMethod'].touched" class="text-sm text-red-500">
+              Please select a payment method.
+            </div>
+          </div>
+  
+          <button type="submit" [disabled]="isSubmitting" class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold">
+            {{ isSubmitting ? 'Processing...' : 'Make Payment' }}
+          </button>
+        </form>
+        <div *ngIf="paymentStatus" class="mt-6">
+          <h3 class="text-xl font-semibold text-gray-800">Payment Status</h3>
+          <p class="text-lg text-gray-600">Status: {{ paymentStatus.status }}</p>
+          <p class="text-lg text-gray-600">Transaction ID: {{ paymentStatus.transactionId }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
