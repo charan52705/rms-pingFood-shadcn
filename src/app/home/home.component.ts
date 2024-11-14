@@ -18,7 +18,7 @@ export class HomeComponent {
     { title: 'Manage Customers', description: 'View and manage customer data', icon: 'fa-user', link: '/admin/customers' },
     { title: 'Manage Branches', description: 'Oversee multiple restaurant locations', icon: 'fa-building', link: '/admin/branches' },
     { title: 'Manage Orders/Inventory', description: 'Track orders and inventory levels', icon: 'fa-shopping-cart', link: '/admin/orders' },
-    { title: 'Manage Payments', description: 'Process and track payments', icon: 'fa-credit-card', link: '/admin/payments' }
+    { title: 'Manage Payments and Orders', description: 'Process and track payments, Orders', icon: 'fa-credit-card', link: '/admin/payments' }
   ];
 
   toggleMenu() {
