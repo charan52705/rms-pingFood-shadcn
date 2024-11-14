@@ -25,7 +25,7 @@ export class ProfileComponent {
   activeComponent: any = OrderstatusComponent;
   isLoggedIn: boolean = false; // Update based on your auth logic
   user: { name: string, avatar: string } | null = null; // User data
-
+  Name:string = 'Divya'
 
   navItems = [
    

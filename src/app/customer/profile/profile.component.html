@@ -6,6 +6,8 @@
       </div>
       <div class="flex-1 overflow-auto">
         <nav class="p-4 space-y-2">
+          <button class="w-full justify-start flex items-center p-2 space-x-2"> <i class="fa-solid fa-user" class="mr-2 w-4 h-4"></i>
+            <span>{{Name}}</span> </button>
           <button
             *ngFor="let item of navItems; let i = index"
             [class.bg-secondary]="activeComponent === item.component"
@@ -15,6 +17,8 @@
             <span>{{ item.label }}</span>
           </button>
         </nav>
+        <button class="w-full justify-start flex items-center p-2 space-x-2"> <i class="fa-solid fa-open" class="mr-2 w-4 h-4"></i>
+          <span>Logout</span> </button>
       </div>
     </aside>
     
@@ -26,7 +30,7 @@
         </div>
         <div class="h-[calc(100vh-5rem)] overflow-auto">
           <nav class="p-4 space-y-2">
-            <button class="w-full justify-start flex items-center p-2 space-x-2"> <i class="fa-solid fa-suer" class="mr-2 w-4 h-4"></i>
+            <button class="w-full justify-start flex items-center p-2 space-x-2"> <i class="fa-solid fa-user" class="mr-2 w-4 h-4"></i>
               <span>Name</span> </button>
             <button
               *ngFor="let item of navItems; let i = index"
