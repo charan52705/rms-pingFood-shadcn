@@ -1,0 +1,13 @@
+/* Add any custom styles here */
+@media (max-width: 640px) {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .hidden {
+      display: none;
+    }
+  }

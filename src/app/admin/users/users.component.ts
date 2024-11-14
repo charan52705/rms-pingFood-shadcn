@@ -3,16 +3,17 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-cities',
+  selector: 'app-users',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, FormsModule],
-  templateUrl: './cities.component.html',
-  styleUrl: './cities.component.css'
+  templateUrl: './users.component.html',
+  styleUrl: './users.component.css'
 })
-export class CitiesComponent {
+export class UsersComponent {
+
   UserForm!: FormGroup;
   isSubmitting: boolean = false;
-  cities: any[] = [];  
+  Users: any[] = [];  
   activeTab: string = 'create';  
   isMenuOpen: boolean = false;   
 
@@ -53,10 +54,11 @@ export class CitiesComponent {
     
     setTimeout(() => {
       const newUser = this.UserForm.value;
-      this.cities.push(newUser);
+      this.Users.push(newUser);
       this.UserForm.reset();
       this.isSubmitting = false;
       this.setActiveTab('read');
     }, 1000);
   }
+
 }

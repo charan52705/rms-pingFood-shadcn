@@ -1,85 +1,56 @@
-<div class="flex flex-col min-h-screen">
-    <header class="px-4 lg:px-6 h-14 flex items-center justify-between">
-      <a class="flex items-center justify-center" href="#">
-        <i class="fas fa-utensils text-xl mr-2"></i>
-        <span class="sr-only">PingFood</span>
-      </a>
-      <nav class="hidden md:flex gap-4 sm:gap-6">
-        <a class="text-sm font-medium hover:underline underline-offset-4" href="#">Features</a>
-        <a class="text-sm font-medium hover:underline underline-offset-4" href="#">Pricing</a>
-        <a class="text-sm font-medium hover:underline underline-offset-4" href="#">About</a>
-        <a class="text-sm font-medium hover:underline underline-offset-4" href="#">Contact</a>
-      </nav>
-      <button (click)="toggleMenu()" class="md:hidden text-xl">
-        <i class="fas fa-bars"></i>
-      </button>
-    </header>
-  
-    <div *ngIf="isMenuOpen" class="md:hidden bg-gray-100 dark:bg-gray-800">
-      <nav class="flex flex-col items-center py-4">
-        <a class="text-sm font-medium hover:underline underline-offset-4 py-2" href="#">Features</a>
-        <a class="text-sm font-medium hover:underline underline-offset-4 py-2" href="#">Pricing</a>
-        <a class="text-sm font-medium hover:underline underline-offset-4 py-2" href="#">About</a>
-        <a class="text-sm font-medium hover:underline underline-offset-4 py-2" href="#">Contact</a>
-      </nav>
-    </div>
-  
-    <main class="flex-1 flex-col items-center justify-center">
-      <section class="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-        <div class="container px-4 md:px-6">
-          <div class="flex flex-col items-center space-y-4 text-center">
-            <div class="space-y-2">
-              <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-                Manage Your Restaurant with Ease
-              </h1>
-              <p class="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                Streamline operations, boost efficiency, and increase profits with our all-in-one restaurant management solution.
-              </p>
-            </div>
-            <div class="space-x-4">
-              <button class="px-4 py-2 bg-black text-white rounded-lg hover:bg-black/90">Get Started</button>
-              <button class="px-4 py-2 bg-gray-50 border-gray-100 border-2 text-black rounded-lg  hover:bg-gray-100/90">Learn More</button>
-            </div>
-          </div>
+<div class="min-h-screen bg-gray-100">
+  <header class="bg-white shadow">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center">
+          <a routerLink="/" class="flex-shrink-0">
+            <h1 class="text-2xl font-bold text-gray-900">Ping Food Admin</h1>
+          </a>
         </div>
-      </section>
-  
-      <section class="w-full py-12 md:py-24 lg:py-32 bg-gray-100 ">
-        <div class="container px-4 md:px-6">
-          <h2 class="text-3xl font-bold tracking-tighter sm:text-5xl items-center justify-center text-center mb-12">Key Features</h2>
-          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <div class="bg-white text-card-foreground rounded-lg shadow-lg" *ngFor="let feature of features">
-              <div class="p-6">
-                <i [class]="feature.icon + ' text-4xl mb-4'"></i>
-                <h3 class="text-lg font-semibold mb-2">{{ feature.title }}</h3>
-                <p>{{ feature.description }}</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="py-10">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Dashboard</h2>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <input type="search" placeholder="Search..." class="max-w-sm px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-black">
+          <button class="px-4 py-2 bg-black text-white rounded-md hover:bg-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2">
+            <i class="fas fa-search mr-2"></i> Search
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let area of managementAreas" class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 bg-black rounded-md p-3">
+                <i class="fas {{ area.icon }} text-white"></i>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">
+                    {{ area.title }}
+                  </dt>
+                  <dd class="text-lg font-medium text-gray-900">
+                    {{ area.description }}
+                  </dd>
+                </dl>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-  
-      <section class="w-full py-12 md:py-24 lg:py-32">
-        <div class="container px-4 md:px-6">
-          <div class="flex flex-col items-center justify-center space-y-4 text-center">
-            <div class="space-y-2">
-              <h2 class="text-3xl font-bold tracking-tighter sm:text-5xl">Ready to Transform Your Restaurant?</h2>
-              <p class="mx-auto max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
-                Join thousands of successful restaurants using our management solution. Start your free trial today.
-              </p>
+          <div class="bg-gray-50 px-4 py-4 sm:px-6">
+            <div class="text-sm">
+              <a [routerLink]="area.link" class="font-medium text-black hover:text-black">
+                Manage <span class="sr-only">{{ area.title }}</span>
+              </a>
             </div>
-            <button class="px-6 py-3 text-lg bg-black text-white rounded-lg hover:bg-black/90">Start Free Trial</button>
           </div>
         </div>
-      </section>
-    </main>
-  
-    <footer class="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-      <p class="text-xs text-gray-500 dark:text-gray-400">© 2024 PingFood. All rights reserved.</p>
-      <nav class="sm:ml-auto flex gap-4 sm:gap-6">
-        <a class="text-xs hover:underline underline-offset-4" href="#">Terms of Service</a>
-        <a class="text-xs hover:underline underline-offset-4" href="#">Privacy</a>
-      </nav>
-    </footer>
-  </div>
-  
+      </div>
+    </div>
+  </main>
+</div>

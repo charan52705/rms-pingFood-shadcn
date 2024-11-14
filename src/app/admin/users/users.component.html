@@ -18,7 +18,7 @@
         Add User
       </button>
       <button (click)="setActiveTab('read')" class="block text-lg font-medium text-gray-700 hover:text-black">
-        Show Cities
+        Show Users
       </button>
       <button (click)="setActiveTab('update')" class="block text-lg font-medium text-gray-700 hover:text-black">
         Update User
@@ -44,7 +44,7 @@
           [class]="tabClass('read')"
           class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opaUser-50"
         >
-          Show Cities
+          Show Users
         </button>
         <button
           (click)="setActiveTab('update')"
@@ -134,13 +134,13 @@
       <!-- Read Tab -->
       <div *ngIf="activeTab === 'read'" class="tab-content w-full md:w-3/4 mx-auto">
         <h2 class="text-2xl font-semibold text-gray-900 mb-4">User List</h2>
-        <ul *ngIf="cities.length > 0" class="space-y-2">
-          <li *ngFor="let User of cities" class="border p-4 rounded-lg shadow-sm">
+        <ul *ngIf="Users.length > 0" class="space-y-2">
+          <li *ngFor="let User of Users" class="border p-4 rounded-lg shadow-sm">
             <p class="text-lg font-semibold">{{ User.UserName }}</p>
             <p class="text-gray-600">{{ User.UserState }}, {{ User.UserCountry }} - {{ User.postalCode }}</p>
           </li>
         </ul>
-        <p *ngIf="cities.length === 0" class="text-gray-600">No cities available.</p>
+        <p *ngIf="Users.length === 0" class="text-gray-600">No Users available.</p>
       </div>
   
       <!-- Update Tab -->

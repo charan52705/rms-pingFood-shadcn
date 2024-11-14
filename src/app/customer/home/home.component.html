@@ -1,0 +1,173 @@
+<div class="min-h-screen bg-white">
+    <header class="bg-white shadow-sm">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center">
+            <a routerLink="/" class="text-2xl font-bold text-gray-900">Gourmet Haven</a>
+          </div>
+          <nav class="hidden md:block">
+            <ul class="flex space-x-4">
+              <li><a href="#menu" class="text-gray-600 hover:text-gray-900">Menu</a></li>
+              <li><a href="#about" class="text-gray-600 hover:text-gray-900">About</a></li>
+              <li><a href="#contact" class="text-gray-600 hover:text-gray-900">Contact</a></li>
+              <li><a href="#reservations" class="bg-black text-white px-4 py-2 rounded-md hover:bg-black transition duration-300">Reservations</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+  
+    <main>
+      <section class="relative h-[calc(100vh-4rem)] bg-cover bg-center" style="background-image: url('/assets/images/hero-bg.jpg')">
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="text-center">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 animate-fade-in-up">Welcome to Gourmet Haven</h1>
+            <p class="text-xl sm:text-2xl text-white mb-8 animate-fade-in-up animation-delay-300">Experience culinary excellence in every bite</p>
+            <a href="#menu" class="bg-white text-gray-900 px-6 py-3 rounded-md text-lg font-semibold hover:bg-gray-100 transition duration-300 animate-fade-in-up animation-delay-600">
+              Explore Our Menu
+            </a>
+          </div>
+        </div>
+      </section>
+  
+      <section id="featured-dishes" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-3xl font-bold text-center mb-12">Featured Dishes</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div *ngFor="let dish of featuredDishes" class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+              <img [src]="'/assets/images/' + dish.name.toLowerCase().replace(' ', '-') + '.jpg'" [alt]="dish.name" class="w-full h-48 object-cover">
+              <div class="p-6">
+                <h3 class="text-xl font-semibold mb-2">{{dish.name}}</h3>
+                <p class="text-gray-600">{{dish.description}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+  
+      <section id="about" class="py-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex flex-col lg:flex-row items-center">
+            <div class="lg:w-1/2 mb-8 lg:mb-0 lg:pr-8">
+              <h2 class="text-3xl font-bold mb-4">Our Story</h2>
+              <p class="text-gray-600 mb-4">
+                Gourmet Haven was born from a passion for exquisite flavors and a commitment to culinary excellence. 
+                Our chef-driven menu features locally-sourced ingredients and innovative techniques to create 
+                unforgettable dining experiences.
+              </p>
+              <p class="text-gray-600 mb-4">
+                From our humble beginnings to becoming a staple in the local food scene, we've always put our 
+                heart and soul into every dish we serve.
+              </p>
+              <a href="#" class="inline-flex items-center text-black font-semibold hover:text-black">
+                Learn more about us 
+                <i class="fas fa-chevron-right ml-2"></i>
+              </a>
+            </div>
+            <div class="lg:w-1/2">
+              <img src="/assets/images/restaurant.jpg" alt="Our Restaurant" class="rounded-lg shadow-md">
+            </div>
+          </div>
+        </div>
+      </section>
+  
+      <section id="contact" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-3xl font-bold text-center mb-12">Contact Us</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h3 class="text-xl font-semibold mb-4">Get in Touch</h3>
+              <ul class="space-y-4">
+                <li class="flex items-center">
+                  <i class="fas fa-map-marker-alt text-black mr-2"></i>
+                  <span>123 Gourmet Street, Foodie City, FC 12345</span>
+                </li>
+                <li class="flex items-center">
+                  <i class="fas fa-phone text-black mr-2"></i>
+                  <span>(123) 456-7890</span>
+                </li>
+                <li class="flex items-center">
+                  <i class="fas fa-clock text-black mr-2"></i>
+                  <span>Mon-Sat: 11am-10pm, Sun: 11am-9pm</span>
+                </li>
+              </ul>
+              <div class="mt-6 flex space-x-4">
+                <a href="#" class="text-gray-400 hover:text-gray-500">
+                  <span class="sr-only">Instagram</span>
+                  <i class="fab fa-instagram text-2xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-gray-500">
+                  <span class="sr-only">Facebook</span>
+                  <i class="fab fa-facebook text-2xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-gray-500">
+                  <span class="sr-only">Twitter</span>
+                  <i class="fab fa-twitter text-2xl"></i>
+                </a>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold mb-4">Send us a Message</h3>
+              <form #contactForm="ngForm" (ngSubmit)="submitForm(contactForm)" class="space-y-4">
+                <div>
+                  <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                  <input type="text" id="name" name="name" ngModel required
+                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                </div>
+                <div>
+                  <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                  <input type="email" id="email" name="email" ngModel required email
+                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                </div>
+                <div>
+                  <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                  <textarea id="message" name="message" rows="4" ngModel required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"></textarea>
+                </div>
+                <button type="submit" [disabled]="!contactForm.form.valid"
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-black hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 ">
+                  Send Message
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  
+    <footer class="bg-gray-800 text-white py-8">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-wrap justify-between">
+          <div class="w-full md:w-1/3 mb-6 md:mb-0">
+            <h3 class="text-lg font-semibold mb-2">Gourmet Haven</h3>
+            <p class="text-sm text-gray-300">Elevating dining experiences since 2010</p>
+          </div>
+          <div class="w-full md:w-1/3 mb-6 md:mb-0">
+            <h3 class="text-lg font-semibold mb-2">Quick Links</h3>
+            <ul class="text-sm">
+              <li><a href="#" class="hover:text-red-400">Menu</a></li>
+              <li><a href="#" class="hover:text-red-400">Reservations</a></li>
+              <li><a href="#" class="hover:text-red-400">Private Events</a></li>
+              <li><a href="#" class="hover:text-red-400">Gift Cards</a></li>
+            </ul>
+          </div>
+          <div class="w-full md:w-1/3">
+            <h3 class="text-lg font-semibold mb-2">Newsletter</h3>
+            <p class="text-sm text-gray-300 mb-2">Subscribe for special offers and updates</p>
+            <form (ngSubmit)="subscribeNewsletter(newsletterEmail.value)" class="flex">
+              <input #newsletterEmail type="email" placeholder="Your email" 
+                     class="flex-grow px-3 py-2 text-gray-900 rounded-l-md focus:outline-none focus:ring-2 focus:ring-red-500">
+              <button type="submit" 
+                      class="bg-black text-white px-4 py-2 rounded-r-md hover:bg-black transition duration-300">
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="mt-8 pt-8 border-t border-gray-700 text-center text-sm text-gray-400">
+          © 2023 Gourmet Haven. All rights reserved.
+        </div>
+      </div>
+    </footer>
+  </div>

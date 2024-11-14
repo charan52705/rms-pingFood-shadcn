@@ -25,10 +25,13 @@ export const routes: Routes = [
   { path: 'admin/menu', loadComponent: () => import('./admin/menu/menu.component').then(m => m.MenuComponent) },
   { path: 'admin/restaurant', loadComponent: () => import('./admin/restaurant/restaurant.component').then(m => m.RestaurantComponent) },
   { path: 'admin/units', loadComponent: () => import('./admin/units/units.component').then(m => m.UnitsComponent) },
+  { path: 'admin/users', loadComponent: () => import('./admin/users/users.component').then(m => m.UsersComponent) },
   { path: 'find/food', loadComponent: () => import('./common/find-food/find-food.component').then(m => m.FindFoodComponent) },
   { path: 'find/hotel', loadComponent: () => import('./common/find-hotel/find-hotel.component').then(m => m.FindHotelComponent) },
-  { path: 'customer/login', loadComponent: () => import('./customer/login/login.component').then(m => m.LoginComponent) },
+  { path: 'common/login', loadComponent: () => import('./common/login/login.component').then(m => m.LoginComponent) },
   { path: 'customer/register', loadComponent: () => import('./customer/register/register.component').then(m => m.RegisterComponent) },
+  { path: 'customer/home', loadComponent: () => import('./customer/register/register.component').then(m => m.RegisterComponent) },
+
 
 
 
