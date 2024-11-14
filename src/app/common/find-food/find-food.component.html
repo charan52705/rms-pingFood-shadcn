@@ -1,0 +1,37 @@
+<div class="max-w-4xl mx-auto p-6 bg-white flex items-center justify-center flex-col">
+    <div class="w-full text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Find Food</h1>
+      <p class="mt-2 text-gray-600">Search and discover delicious food items.</p>
+    </div>
+  
+    <!-- Search Form -->
+    <div *ngIf="activeTab === 'search'" class="w-full md:w-3/4 mx-auto mb-4">
+      <form [formGroup]="foodForm" (ngSubmit)="onSearchSubmit()">
+        <input
+          formControlName="search"
+          type="text"
+          placeholder="Search for food..."
+          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+        />
+        <button
+          type="submit"
+          [disabled]="isSubmitting"
+          class="w-full py-3 mt-4 px-4 bg-black text-white rounded-lg font-semibold"
+        >
+          {{ isSubmitting ? 'Searching...' : 'Search' }}
+        </button>
+      </form>
+    </div>
+  
+    <!-- Food Results -->
+    <div *ngIf="activeTab === 'search'" class="w-full md:w-3/4 mx-auto mt-8">
+      <ul class="space-y-4">
+        <li *ngFor="let food of foods" class="border p-4 rounded-lg shadow-sm">
+          <p class="text-lg font-semibold">{{ food.name }}</p>
+          <p class="text-gray-600">{{ food.description }} - ${{ food.price }}</p>
+        </li>
+      </ul>
+      <p *ngIf="foods.length === 0" class="text-gray-600">No results found.</p>
+    </div>
+  </div>
+  

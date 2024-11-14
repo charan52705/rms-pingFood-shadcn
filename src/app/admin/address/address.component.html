@@ -1,101 +1,173 @@
-<div class="max-w-2xl mx-auto p-4 bg-white items-center justify-center flex flex-col h-auto sm:h-[100vh]">
-    <!-- Header Section -->
-    <div class="w-full text-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-900">Add New Address</h1>
-      <p class="mt-2 text-gray-600">Please provide your address details below.</p>
+<div class="max-w-4xl mx-auto p-6 bg-white flex items-center justify-center flex-col h-full">
+  <!-- Header Section -->
+  <div class="w-full text-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Address Management</h1>
+    <p class="mt-2 text-gray-600">Manage Address information through CRUD operations.</p>
+  </div>
+
+  <!-- Mobile Menu Icon (visible on small screens) -->
+  <div class="md:hidden flex justify-end w-full mb-4">
+    <button (click)="toggleMenu()" class="text-2xl">
+      <i class="fas fa-bars"></i> <!-- Font Awesome or custom icon -->
+    </button>
+  </div>
+
+  <!-- Mobile Menu (Hidden by default, shown when clicked) -->
+  <div *ngIf="isMenuOpen" class="w-full md:hidden space-y-4 bg-white shadow-md p-4 rounded-lg">
+    <button (click)="setActiveTab('create')" class="block text-lg font-medium text-gray-700 hover:text-black transition-all duration-200 ease-in-out transform hover:scale-105">
+      Add Address
+    </button>
+    <button (click)="setActiveTab('read')" class="block text-lg font-medium text-gray-700 hover:text-black transition-all duration-200 ease-in-out transform hover:scale-105">
+      Show addresses
+    </button>
+    <button (click)="setActiveTab('update')" class="block text-lg font-medium text-gray-700 hover:text-black transition-all duration-200 ease-in-out transform hover:scale-105">
+      Update Address
+    </button>
+    <button (click)="setActiveTab('delete')" class="block text-lg font-medium text-gray-700 hover:text-black transition-all duration-200 ease-in-out transform hover:scale-105">
+      Delete Address
+    </button>
+  </div>
+
+  <!-- Tabs Section (visible on larger screens) -->
+  <div class="w-full hidden md:flex flex-col address-center">
+    <!-- Tab Headers -->
+    <div class="flex justify-center space-x-4 border-b">
+      <button
+        (click)="setActiveTab('create')"
+        [class]="tabClass('create')"
+        class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black transition-all duration-200 ease-in-out transform hover:scale-105"
+      >
+        Add Address
+      </button>
+      <button
+        (click)="setActiveTab('read')"
+        [class]="tabClass('read')"
+        class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opacity-50 transition-all duration-200 ease-in-out transform hover:scale-105"
+      >
+        Show addresses
+      </button>
+      <button
+        (click)="setActiveTab('update')"
+        [class]="tabClass('update')"
+        class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opacity-50 transition-all duration-200 ease-in-out transform hover:scale-105"
+      >
+        Update Address
+      </button>
+      <button
+        (click)="setActiveTab('delete')"
+        [class]="tabClass('delete')"
+        class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opacity-50 transition-all duration-200 ease-in-out transform hover:scale-105"
+      >
+        Delete Address
+      </button>
     </div>
-  
-    <!-- Form Section -->
-    <form [formGroup]="addressForm" (ngSubmit)="onSubmit()" class="space-y-6 w-full max-w-xl mx-auto">
-      <!-- Full Name -->
-      <div class="form-group">
-        <label for="fullName" class="block text-lg font-semibold text-gray-700">Full Name</label>
-        <input 
-          id="fullName" 
-          formControlName="fullName" 
-          type="text" 
-          placeholder="John Doe" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="addressForm.controls['fullName'].invalid && addressForm.controls['fullName'].touched" class="text-sm text-red-500">
-          Full Name is required and should be at least 2 characters long.
+  </div>
+
+  <!-- Tab Contents -->
+  <div class="tabs-content mt-8 space-y-8 w-full">
+    <!-- Create Tab -->
+    <div *ngIf="activeTab === 'create'" class="tab-content w-full md:w-3/4 mx-auto">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Add New Address</h2>
+      <form [formGroup]="addressForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <div class="form-group">
+          <label for="street" class="block text-lg font-semibold text-gray-700">Street</label>
+          <input
+            id="street"
+            formControlName="street"
+            type="text"
+            placeholder="Street Address"
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+          />
+          <div *ngIf="addressForm.controls['street'].invalid && addressForm.controls['street'].touched" class="text-sm text-red-500">
+            Street is required.
+          </div>
         </div>
-      </div>
-  
-      <!-- Address Line 1 -->
-      <div class="form-group">
-        <label for="addressLine1" class="block text-lg font-semibold text-gray-700">Address Line 1</label>
-        <input 
-          id="addressLine1" 
-          formControlName="addressLine1" 
-          type="text" 
-          placeholder="123 Main St" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="addressForm.controls['addressLine1'].invalid && addressForm.controls['addressLine1'].touched" class="text-sm text-red-500">
-          Address Line 1 is required and should be at least 5 characters long.
-        </div>
-      </div>
-  
-      <!-- Address Line 2 -->
-      <div class="form-group">
-        <label for="addressLine2" class="block text-lg font-semibold text-gray-700">Address Line 2 (Optional)</label>
-        <input 
-          id="addressLine2" 
-          formControlName="addressLine2" 
-          type="text" 
-          placeholder="Apt 4B" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-      </div>
-  
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- City -->
+
         <div class="form-group">
           <label for="city" class="block text-lg font-semibold text-gray-700">City</label>
-          <input 
-            id="city" 
-            formControlName="city" 
-            type="text" 
-            placeholder="New York" 
-            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+          <input
+            id="city"
+            formControlName="city"
+            type="text"
+            placeholder="City"
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+          />
           <div *ngIf="addressForm.controls['city'].invalid && addressForm.controls['city'].touched" class="text-sm text-red-500">
-            City is required and should be at least 2 characters long.
+            City is required.
           </div>
         </div>
-  
-        <!-- State -->
+
         <div class="form-group">
           <label for="state" class="block text-lg font-semibold text-gray-700">State</label>
-          <input 
-            id="state" 
-            formControlName="state" 
-            type="text" 
-            placeholder="NY" 
-            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+          <input
+            id="state"
+            formControlName="state"
+            type="text"
+            placeholder="State"
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+          />
           <div *ngIf="addressForm.controls['state'].invalid && addressForm.controls['state'].touched" class="text-sm text-red-500">
-            State is required and should be at least 2 characters long.
+            State is required.
           </div>
         </div>
-      </div>
-  
-      <!-- Zip Code -->
-      <div class="form-group">
-        <label for="zipCode" class="block text-lg font-semibold text-gray-700">Zip Code</label>
-        <input 
-          id="zipCode" 
-          formControlName="zipCode" 
-          type="text" 
-          placeholder="12345" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="addressForm.controls['zipCode'].invalid && addressForm.controls['zipCode'].touched" class="text-sm text-red-500">
-          Invalid Zip Code format.
+
+        <div class="form-group">
+          <label for="postalCode" class="block text-lg font-semibold text-gray-700">Postal Code</label>
+          <input
+            id="postalCode"
+            formControlName="postalCode"
+            type="text"
+            placeholder="Postal Code"
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+          />
+          <div *ngIf="addressForm.controls['postalCode'].invalid && addressForm.controls['postalCode'].touched" class="text-sm text-red-500">
+            Postal Code is required.
+          </div>
         </div>
-      </div>
-  
-      <!-- Submit Button -->
-      <button 
-        type="submit" 
-        [disabled]="isSubmitting" 
-        class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 hover:bg-black disabled:bg-black">
-        {{ isSubmitting ? 'Submitting...' : 'Submit' }}
-      </button>
-    </form>
+
+        <div class="form-group">
+          <label for="country" class="block text-lg font-semibold text-gray-700">Country</label>
+          <input
+            id="country"
+            formControlName="country"
+            type="text"
+            placeholder="Country"
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+          />
+          <div *ngIf="addressForm.controls['country'].invalid && addressForm.controls['country'].touched" class="text-sm text-red-500">
+            Country is required.
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="isSubmitting" class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold">
+          {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+        </button>
+      </form>
+    </div>
+
+    <!-- Read Tab -->
+    <div *ngIf="activeTab === 'read'" class="tab-content w-full md:w-3/4 mx-auto">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4">Address List</h2>
+      <ul *ngIf="addresses.length > 0" class="space-y-2">
+        <li *ngFor="let address of addresses" class="border p-4 rounded-lg shadow-sm">
+          <p class="text-lg font-semibold">{{ address.street }}</p>
+          <p class="text-gray-600">{{ address.city }}, {{ address.state }} - {{ address.postalCode }}</p>
+          <p class="text-gray-600">{{ address.country }}</p>
+        </li>
+      </ul>
+      <p *ngIf="addresses.length === 0" class="text-gray-600">No addresses available.</p>
+    </div>
+
+    <!-- Update Tab -->
+    <div *ngIf="activeTab === 'update'" class="tab-content w-full md:w-3/4 mx-auto">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4">Update Address</h2>
+      <p class="text-gray-600">Select an Address to update its details.</p>
+    </div>
+
+    <!-- Delete Tab -->
+    <div *ngIf="activeTab === 'delete'" class="tab-content w-full md:w-3/4 mx-auto">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4">Delete Address</h2>
+      <p class="text-gray-600">Select an Address to delete from the list.</p>
+    </div>
   </div>
+</div>

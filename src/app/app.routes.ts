@@ -24,5 +24,8 @@ export const routes: Routes = [
   { path: 'admin/items', loadComponent: () => import('./admin/items/items.component').then(m => m.ItemsComponent) },
   { path: 'admin/menu', loadComponent: () => import('./admin/menu/menu.component').then(m => m.MenuComponent) },
   { path: 'admin/restaurant', loadComponent: () => import('./admin/restaurant/restaurant.component').then(m => m.RestaurantComponent) },
-  { path: 'admin/units', loadComponent: () => import('./admin/units/units.component').then(m => m.UnitsComponent) }
+  { path: 'admin/units', loadComponent: () => import('./admin/units/units.component').then(m => m.UnitsComponent) },
+  { path: 'find/food', loadComponent: () => import('./common/find-food/find-food.component').then(m => m.FindFoodComponent) },
+  { path: 'find/hotel', loadComponent: () => import('./common/find-hotel/find-hotel.component').then(m => m.FindHotelComponent) }
+
 ];

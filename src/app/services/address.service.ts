@@ -1,47 +1,70 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import { Observable, from, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
+
+
+export interface Address {
+  street: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+}
+
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AddressService {
-
-  private apiUrl = 'https://your-api-url.com/addresses';  // Replace with your actual API endpoint
+  private apiUrl = 'https:/api/addresses'; // Replace with your API URL
 
   constructor() {}
 
-  // Add new address
-  addAddress(addressData: any) {
-    return axios.post(this.apiUrl, addressData)
-      .then(response => response.data)
-      .catch(error => {
-        throw this.handleError(error);
-      });
+  // Get all addresses
+  getAddresses(): Observable<Address[]> {
+    return from(
+      axios.get<Address[]>(this.apiUrl).then((response) => response.data)
+    ).pipe(
+      catchError(this.handleError<Address[]>('getAddresses', []))
+    );
   }
 
-  // Update existing address
-  updateAddress(addressId: string, addressData: any) {
-    return axios.put(`${this.apiUrl}/${addressId}`, addressData)
-      .then(response => response.data)
-      .catch(error => {
-        throw this.handleError(error);
-      });
+  // Add a new address
+  addAddress(address: Address): Observable<Address> {
+    return from(
+      axios.post<Address>(this.apiUrl, address).then((response) => response.data)
+    ).pipe(
+      catchError(this.handleError<Address>('addAddress'))
+    );
   }
 
-  // Handle errors globally
-  private handleError(error: any) {
-    if (error.response) {
-      // Server responded with a status other than 2xx
-      console.error('Error Response:', error.response);
-      return error.response.data || 'An error occurred!';
-    } else if (error.request) {
-      // No response was received
-      console.error('Error Request:', error.request);
-      return 'No response from the server!';
-    } else {
-      // Something else happened
-      console.error('Error:', error.message);
-      return error.message || 'An unknown error occurred!';
-    }
+  // Update an existing address
+  updateAddress(address: Address): Observable<Address> {
+    return from(
+      axios.put<Address>(`${this.apiUrl}/${address.street}`, address).then(
+        (response) => response.data
+      )
+    ).pipe(
+      catchError(this.handleError<Address>('updateAddress'))
+    );
+  }
+
+  // Delete an address by street name (or unique identifier)
+  deleteAddress(street: string): Observable<{}> {
+    return from(
+      axios.delete(`${this.apiUrl}/${street}`).then(() => ({}))
+    ).pipe(
+      catchError(this.handleError<{}>('deleteAddress'))
+    );
+  }
+
+  // Handle HTTP errors
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(`${operation} failed: ${error.message}`);
+      return of(result as T); // Return an empty result for safe handling
+    };
   }
 }
