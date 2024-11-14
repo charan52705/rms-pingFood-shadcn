@@ -19,12 +19,6 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   async onSubmit() {
-    try {
-      const response = await this.authService.login(this.email, this.password);
-      localStorage.setItem('token', response.access_token); 
-      this.router.navigate(['/admin']); 
-    } catch (error) {
-      this.errorMessage = 'Invalid email or password';
-    }
+    console.log('Hello')
   }
 }

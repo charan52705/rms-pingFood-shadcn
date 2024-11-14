@@ -10,6 +10,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+  isMobileMenuVisible = false;
+  toggleMobileMenu() {
+    this.isMobileMenuVisible = !this.isMobileMenuVisible;
+  }
   featuredDishes = [
     { name: "Truffle Risotto", description: "Creamy Arborio rice with black truffle and Parmesan" },
     { name: "Seared Scallops", description: "Pan-seared scallops with cauliflower purée and bacon crumbs" },

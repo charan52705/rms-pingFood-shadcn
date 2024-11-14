@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +12,7 @@ import { RouterModule } from '@angular/router';
 })
 export class HomeComponent {
   isMenuOpen = false;
+  constructor(private router: Router){}
   managementAreas = [
     { title: 'Manage Menu/Items', description: 'View and edit menu items', icon: 'fa-utensils', link: '/admin/menu' },
     { title: 'Manage Users', description: 'Manage system users and roles', icon: 'fa-users', link: '/admin/users' },
@@ -24,5 +25,7 @@ export class HomeComponent {
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
-
+  gotoHome() {
+    this.router.navigate([''])
+  }
 }

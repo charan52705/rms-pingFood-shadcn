@@ -1,42 +1,49 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, FormsModule],
+  standalone:true,
+  imports:[ReactiveFormsModule, FormsModule, CommonModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
+  userType: string = 'customer'; // Default value
 
-  loginForm: FormGroup;
-  userType: string = 'customer';
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {}
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  ngOnInit() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      userType: ['customer', Validators.required] 
     });
   }
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log('Login as', this.userType, 'with', this.loginForm.value);
-    }
-    this.router.navigate([''])
-  }
-  redirectToRegister(): void {
-    // Redirect to the appropriate registration page based on the selected user type
-    if (this.userType === 'customer') {
-      this.router.navigate(['/customer/register']);
-    } else {
-      this.router.navigate(['/admin/register']);
-    }
-  }
-  
+      const { email, password, userType } = this.loginForm.value; // Get the value of userType from the form control
+      console.log('Form submitted', this.loginForm.value);
+      this.authService.login(userType);
 
+      // Redirect based on the selected userType
+      if (userType === 'customer') {
+        this.router.navigate(['/customer/home'])
+      } else {
+        this.router.navigate(['/admin/home']);
+      }
+    } else {
+      console.log('Form is invalid');
+    }
+  }
+
+  redirectToRegister() {
+    // Logic for redirection to the register page
+    console.log('Redirecting to register...');
+  }
 }
