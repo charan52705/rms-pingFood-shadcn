@@ -1,75 +1,159 @@
-<div class="max-w-2xl mx-auto p-4 bg-white items-center justify-center flex flex-col h-[100vh]">
+<div class="max-w-4xl mx-auto p-6 bg-white flex items-center justify-center flex-col h-full">
     <!-- Header Section -->
     <div class="w-full text-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-900">Add New City</h1>
-      <p class="mt-2 text-gray-600">Please provide the details of the new city.</p>
+      <h1 class="text-3xl font-bold text-gray-900">City Management</h1>
+      <p class="mt-2 text-gray-600">Manage city information through CRUD operations.</p>
     </div>
   
-    <!-- Form Section -->
-    <form [formGroup]="cityForm" (ngSubmit)="onSubmit()" class="space-y-6 w-full max-w-xl mx-auto">
-      <!-- City Name -->
-      <div class="form-group">
-        <label for="cityName" class="block text-lg font-semibold text-gray-700">City Name</label>
-        <input 
-          id="cityName" 
-          formControlName="cityName" 
-          type="text" 
-          placeholder="New York" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="cityForm.controls['cityName'].invalid && cityForm.controls['cityName'].touched" class="text-sm text-red-500">
-          City Name is required and should be at least 2 characters long.
-        </div>
-      </div>
-  
-      <!-- City State -->
-      <div class="form-group">
-        <label for="cityState" class="block text-lg font-semibold text-gray-700">State</label>
-        <input 
-          id="cityState" 
-          formControlName="cityState" 
-          type="text" 
-          placeholder="NY" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="cityForm.controls['cityState'].invalid && cityForm.controls['cityState'].touched" class="text-sm text-red-500">
-          State is required and should be at least 2 characters long.
-        </div>
-      </div>
-  
-      <!-- City Country -->
-      <div class="form-group">
-        <label for="cityCountry" class="block text-lg font-semibold text-gray-700">Country</label>
-        <input 
-          id="cityCountry" 
-          formControlName="cityCountry" 
-          type="text" 
-          placeholder="United States" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="cityForm.controls['cityCountry'].invalid && cityForm.controls['cityCountry'].touched" class="text-sm text-red-500">
-          Country is required and should be at least 2 characters long.
-        </div>
-      </div>
-  
-      <!-- Postal Code -->
-      <div class="form-group">
-        <label for="postalCode" class="block text-lg font-semibold text-gray-700">Postal Code</label>
-        <input 
-          id="postalCode" 
-          formControlName="postalCode" 
-          type="text" 
-          placeholder="10001" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="cityForm.controls['postalCode'].invalid && cityForm.controls['postalCode'].touched" class="text-sm text-red-500">
-          Invalid Postal Code format.
-        </div>
-      </div>
-  
-      <!-- Submit Button -->
-      <button 
-        type="submit" 
-        [disabled]="isSubmitting" 
-        class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 hover:bg-black disabled:bg-black">
-        {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+    <!-- Mobile Menu Icon (visible on small screens) -->
+    <div class="md:hidden flex justify-end w-full mb-4">
+      <button (click)="toggleMenu()" class="text-2xl">
+        <i class="fas fa-bars"></i> <!-- Font Awesome or custom icon -->
       </button>
-    </form>
+    </div>
+  
+    <!-- Mobile Menu (Hidden by default, shown when clicked) -->
+    <div *ngIf="isMenuOpen" class="w-full md:hidden space-y-4 bg-white shadow-md p-4 rounded-lg">
+      <button (click)="setActiveTab('create')" class="block text-lg font-medium text-gray-700 hover:text-black">
+        Add City
+      </button>
+      <button (click)="setActiveTab('read')" class="block text-lg font-medium text-gray-700 hover:text-black">
+        Show Cities
+      </button>
+      <button (click)="setActiveTab('update')" class="block text-lg font-medium text-gray-700 hover:text-black">
+        Update City
+      </button>
+      <button (click)="setActiveTab('delete')" class="block text-lg font-medium text-gray-700 hover:text-black">
+        Delete City
+      </button>
+    </div>
+  
+    <!-- Tabs Section (visible on larger screens) -->
+    <div class="w-full hidden md:flex flex-col items-center">
+      <!-- Tab Headers -->
+      <div class="flex justify-center space-x-4 border-b">
+        <button
+          (click)="setActiveTab('create')"
+          [class]="tabClass('create')"
+          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black transition-all duration-200 ease-in-out transform hover:scale-105"
+        >
+          Add City
+        </button>
+        <button
+          (click)="setActiveTab('read')"
+          [class]="tabClass('read')"
+          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opacity-50"
+        >
+          Show Cities
+        </button>
+        <button
+          (click)="setActiveTab('update')"
+          [class]="tabClass('update')"
+          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opacity-50"
+        >
+          Update City
+        </button>
+        <button
+          (click)="setActiveTab('delete')"
+          [class]="tabClass('delete')"
+          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opacity-50"
+        >
+          Delete City
+        </button>
+      </div>
+    </div>
+  
+    <!-- Tab Contents -->
+    <div class="tabs-content mt-8 space-y-8 w-full">
+      <!-- Create Tab -->
+      <div *ngIf="activeTab === 'create'" class="tab-content w-full md:w-3/4 mx-auto">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Add New City</h2>
+        <form [formGroup]="cityForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <div class="form-group">
+            <label for="cityName" class="block text-lg font-semibold text-gray-700">City Name</label>
+            <input
+              id="cityName"
+              formControlName="cityName"
+              type="text"
+              placeholder="New York"
+              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            />
+            <div *ngIf="cityForm.controls['cityName'].invalid && cityForm.controls['cityName'].touched" class="text-sm text-red-500">
+              City Name is required and should be at least 2 characters long.
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="cityState" class="block text-lg font-semibold text-gray-700">State</label>
+            <input
+              id="cityState"
+              formControlName="cityState"
+              type="text"
+              placeholder="NY"
+              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            />
+            <div *ngIf="cityForm.controls['cityState'].invalid && cityForm.controls['cityState'].touched" class="text-sm text-red-500">
+              State is required and should be at least 2 characters long.
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="cityCountry" class="block text-lg font-semibold text-gray-700">Country</label>
+            <input
+              id="cityCountry"
+              formControlName="cityCountry"
+              type="text"
+              placeholder="United States"
+              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            />
+            <div *ngIf="cityForm.controls['cityCountry'].invalid && cityForm.controls['cityCountry'].touched" class="text-sm text-red-500">
+              Country is required and should be at least 2 characters long.
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="postalCode" class="block text-lg font-semibold text-gray-700">Postal Code</label>
+            <input
+              id="postalCode"
+              formControlName="postalCode"
+              type="text"
+              placeholder="10001"
+              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            />
+            <div *ngIf="cityForm.controls['postalCode'].invalid && cityForm.controls['postalCode'].touched" class="text-sm text-red-500">
+              Invalid Postal Code format.
+            </div>
+          </div>
+  
+          <button type="submit" [disabled]="isSubmitting" class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold">
+            {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+          </button>
+        </form>
+      </div>
+  
+      <!-- Read Tab -->
+      <div *ngIf="activeTab === 'read'" class="tab-content w-full md:w-3/4 mx-auto">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4">City List</h2>
+        <ul *ngIf="cities.length > 0" class="space-y-2">
+          <li *ngFor="let city of cities" class="border p-4 rounded-lg shadow-sm">
+            <p class="text-lg font-semibold">{{ city.cityName }}</p>
+            <p class="text-gray-600">{{ city.cityState }}, {{ city.cityCountry }} - {{ city.postalCode }}</p>
+          </li>
+        </ul>
+        <p *ngIf="cities.length === 0" class="text-gray-600">No cities available.</p>
+      </div>
+  
+      <!-- Update Tab -->
+      <div *ngIf="activeTab === 'update'" class="tab-content w-full md:w-3/4 mx-auto">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Update City</h2>
+        <p class="text-gray-600">Select a city to update its details.</p>
+      </div>
+  
+      <!-- Delete Tab -->
+      <div *ngIf="activeTab === 'delete'" class="tab-content w-full md:w-3/4 mx-auto">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Delete City</h2>
+        <p class="text-gray-600">Select a city to delete from the list.</p>
+      </div>
+    </div>
   </div>
   

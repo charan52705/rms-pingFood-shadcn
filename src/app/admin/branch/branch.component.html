@@ -1,75 +1,150 @@
-<div class="max-w-2xl mx-auto p-4 bg-white items-center justify-center flex flex-col h-[100vh]">
+<div class="max-w-4xl mx-auto p-6 bg-white flex items-center justify-center flex-col h-full">
     <!-- Header Section -->
     <div class="w-full text-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-900">Add New Branch</h1>
-      <p class="mt-2 text-gray-600">Please provide the details of the new branch.</p>
+      <h1 class="text-3xl font-bold text-gray-900">Branch Management</h1>
+      <p class="mt-2 text-gray-600">Manage branch information through CRUD operations.</p>
     </div>
   
-    <!-- Form Section -->
-    <form [formGroup]="branchForm" (ngSubmit)="onSubmit()" class="space-y-6 w-full max-w-xl mx-auto">
-      <!-- Branch Name -->
-      <div class="form-group">
-        <label for="branchName" class="block text-lg font-semibold text-gray-700">Branch Name</label>
-        <input 
-          id="branchName" 
-          formControlName="branchName" 
-          type="text" 
-          placeholder="Main Branch" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="branchForm.controls['branchName'].invalid && branchForm.controls['branchName'].touched" class="text-sm text-red-500">
-          Branch Name is required and should be at least 2 characters long.
-        </div>
-      </div>
-  
-      <!-- Branch Location -->
-      <div class="form-group">
-        <label for="branchLocation" class="block text-lg font-semibold text-gray-700">Branch Location</label>
-        <input 
-          id="branchLocation" 
-          formControlName="branchLocation" 
-          type="text" 
-          placeholder="New York City, NY" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="branchForm.controls['branchLocation'].invalid && branchForm.controls['branchLocation'].touched" class="text-sm text-red-500">
-          Branch Location is required and should be at least 3 characters long.
-        </div>
-      </div>
-  
-      <!-- Branch Address -->
-      <div class="form-group">
-        <label for="branchAddress" class="block text-lg font-semibold text-gray-700">Branch Address</label>
-        <input 
-          id="branchAddress" 
-          formControlName="branchAddress" 
-          type="text" 
-          placeholder="123 Main St, Suite 101" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="branchForm.controls['branchAddress'].invalid && branchForm.controls['branchAddress'].touched" class="text-sm text-red-500">
-          Branch Address is required and should be at least 5 characters long.
-        </div>
-      </div>
-  
-      <!-- Contact Number -->
-      <div class="form-group">
-        <label for="contactNumber" class="block text-lg font-semibold text-gray-700">Contact Number</label>
-        <input 
-          id="contactNumber" 
-          formControlName="contactNumber" 
-          type="text" 
-          placeholder="(123) 456-7890" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="branchForm.controls['contactNumber'].invalid && branchForm.controls['contactNumber'].touched" class="text-sm text-red-500">
-          A valid contact number is required.
-        </div>
-      </div>
-  
-      <!-- Submit Button -->
-      <button 
-        type="submit" 
-        [disabled]="isSubmitting" 
-        class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 hover:bg-black disabled:bg-black">
-        {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+    <!-- Mobile Menu Icon (visible on small screens) -->
+    <div class="md:hidden flex justify-end w-full mb-4">
+      <button (click)="toggleMenu()" class="text-2xl">
+        <i class="fas fa-bars"></i> <!-- Font Awesome or custom icon -->
       </button>
-    </form>
+    </div>
+  
+    <!-- Mobile Menu (Hidden by default, shown when clicked) -->
+    <div *ngIf="isMenuOpen" class="w-full md:hidden space-y-4 bg-white shadow-md p-4 rounded-lg">
+      <button (click)="setActiveTab('create')" class="block text-lg font-medium text-gray-700 hover:text-black">
+        Add Branch
+      </button>
+      <button (click)="setActiveTab('read')" class="block text-lg font-medium text-gray-700 hover:text-black">
+        Show Branches
+      </button>
+      <button (click)="setActiveTab('update')" class="block text-lg font-medium text-gray-700 hover:text-black">
+        Update Branch
+      </button>
+      <button (click)="setActiveTab('delete')" class="block text-lg font-medium text-gray-700 hover:text-black">
+        Delete Branch
+      </button>
+    </div>
+  
+    <!-- Tabs Section (visible on larger screens) -->
+    <div class="w-full hidden md:flex flex-col items-center">
+      <!-- Tab Headers -->
+      <div class="flex justify-center space-x-4 border-b">
+        <button
+          (click)="setActiveTab('create')"
+          [class]="tabClass('create')"
+          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black transition-all duration-200 ease-in-out transform hover:scale-105"
+        >
+          Add Branch
+        </button>
+        <button
+          (click)="setActiveTab('read')"
+          [class]="tabClass('read')"
+          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opacity-50"
+        >
+          Show Branches
+        </button>
+        <button
+          (click)="setActiveTab('update')"
+          [class]="tabClass('update')"
+          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opacity-50"
+        >
+          Update Branch
+        </button>
+        <button
+          (click)="setActiveTab('delete')"
+          [class]="tabClass('delete')"
+          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opacity-50"
+        >
+          Delete Branch
+        </button>
+      </div>
+    </div>
+  
+    <!-- Tab Contents -->
+    <div class="tabs-content mt-8 space-y-8 w-full">
+      <!-- Create Tab -->
+      <div *ngIf="activeTab === 'create'" class="tab-content w-full md:w-3/4 mx-auto">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Add New Branch</h2>
+        <form [formGroup]="branchForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <div class="form-group">
+            <label for="branchName" class="block text-lg font-semibold text-gray-700">Branch Name</label>
+            <input
+              id="branchName"
+              formControlName="branchName"
+              type="text"
+              placeholder="Branch Name"
+              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            />
+            <div *ngIf="branchForm.controls['branchName'].invalid && branchForm.controls['branchName'].touched" class="text-sm text-red-500">
+              Branch Name is required and should be at least 2 characters long.
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="branchLocation" class="block text-lg font-semibold text-gray-700">Branch Location</label>
+            <input
+              id="branchLocation"
+              formControlName="branchLocation"
+              type="text"
+              placeholder="Location"
+              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            />
+            <div *ngIf="branchForm.controls['branchLocation'].invalid && branchForm.controls['branchLocation'].touched" class="text-sm text-red-500">
+              Location is required.
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="branchManager" class="block text-lg font-semibold text-gray-700">Branch Manager</label>
+            <input
+              id="branchManager"
+              formControlName="branchManager"
+              type="text"
+              placeholder="Manager Name"
+              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            />
+            <div *ngIf="branchForm.controls['branchManager'].invalid && branchForm.controls['branchManager'].touched" class="text-sm text-red-500">
+              Manager is required.
+            </div>
+          </div>
+  
+          <button type="submit" [disabled]="isSubmitting" class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold">
+            {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+          </button>
+        </form>
+      </div>
+  
+      <!-- Read Tab -->
+      <div *ngIf="activeTab === 'read'" class="tab-content w-full md:w-3/4 mx-auto">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Branch List</h2>
+        <ul *ngIf="branches.length > 0" class="space-y-2">
+          <li *ngFor="let branch of branches" class="border p-4 rounded-lg shadow-sm">
+            <p class="text-lg font-semibold">{{ branch.branchName }}</p>
+            <p class="text-gray-600">{{ branch.branchLocation }}</p>
+            <p class="text-gray-600">Manager: {{ branch.branchManager }}</p>
+            <button (click)="selectBranchForUpdate(branch)" class="text-blue-500 hover:text-blue-700 mt-2">Edit</button>
+            <button (click)="deleteBranch(branch.branchName)" class="text-red-500 hover:text-red-700 mt-2">Delete</button>
+          </li>
+        </ul>
+        <p *ngIf="branches.length === 0" class="text-gray-600">No branches available.</p>
+      </div>
+  
+      <!-- Update Tab -->
+      <div *ngIf="activeTab === 'update'" class="tab-content w-full md:w-3/4 mx-auto">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Update Branch</h2>
+        <p class="text-gray-600">Select a branch to update its details.</p>
+        <!-- Similar to the create form, pre-populated with branch data -->
+      </div>
+  
+      <!-- Delete Tab -->
+      <div *ngIf="activeTab === 'delete'" class="tab-content w-full md:w-3/4 mx-auto">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Delete Branch</h2>
+        <p class="text-gray-600">Select a branch to delete from the list.</p>
+        <!-- Similar to the read tab, but with delete functionality -->
+      </div>
+    </div>
   </div>
   

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-
+import { UnitsService, Unit } from '../../services/units.service';
 
 @Component({
   selector: 'app-units',
@@ -11,30 +11,116 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } 
   styleUrl: './units.component.css'
 })
 export class UnitsComponent {
-  unitForm: FormGroup;
+  UnitForm: FormGroup;
   isSubmitting: boolean = false;
+  activeTab: string = 'create'; 
+  isMenuOpen: boolean = false; 
 
-  constructor(private fb: FormBuilder) {
-    // Define form structure with validation rules
-    this.unitForm = this.fb.group({
-      unitName: ['', [Validators.required, Validators.minLength(3)]],
-      unitAbbreviation: ['', [Validators.required, Validators.pattern(/^[A-Za-z0-9]{1,5}$/)]],  // Unit abbreviation validation
-      associatedState: ['', [Validators.required, Validators.minLength(3)]],  // Optional association
+  
+  Units: Unit[] = [];
+
+  constructor(private fb: FormBuilder, private UnitService: UnitsService) {
+    
+    this.UnitForm = this.fb.group({
+      UnitName: ['', [Validators.required, Validators.minLength(2)]],
+      UnitDescription: ['', [Validators.required]],
+      UnitPrice: ['', [Validators.required, Validators.min(0.01)]]
     });
   }
 
-  // Handle form submission
-  onSubmit() {
-    if (this.unitForm.invalid) {
-      return;
-    }
+  ngOnInit(): void {
+    
+    this.loadUnits();
+  }
 
-    this.isSubmitting = true;
-    // Simulate an API call for adding a unit
-    setTimeout(() => {
-      this.isSubmitting = false;
-      console.log('Unit added:', this.unitForm.value);
-      // Here you can call a service to save the unit details to a backend
-    }, 2000);
+  
+  loadUnits(): void {
+    this.UnitService.getUnits().subscribe(
+      Units => {
+        this.Units = Units;
+      },
+      error => {
+        console.error('Error fetching Units:', error);
+      }
+    );
+  }
+
+  
+  onSubmit(): void {
+    if (this.UnitForm.valid) {
+      this.isSubmitting = true;
+      const formData: Unit = this.UnitForm.value;
+
+      if (this.activeTab === 'create') {
+        this.addUnit(formData);
+      } else if (this.activeTab === 'update') {
+        this.updateUnit(formData);
+      }
+    }
+  }
+
+  
+  addUnit(Unit: Unit): void {
+    this.UnitService.addUnit(Unit).subscribe(
+      newUnit => {
+        this.Units.push(newUnit); 
+        this.UnitForm.reset(); 
+        this.setActiveTab('read'); 
+      },
+      error => {
+        console.error('Error adding Unit:', error);
+      }
+    );
+  }
+
+  
+  updateUnit(Unit: Unit): void {
+    this.UnitService.updateUnit(Unit).subscribe(
+      updatedUnit => {
+        const index = this.Units.findIndex(existingUnit => existingUnit.UnitName === updatedUnit.UnitName);
+        if (index !== -1) {
+          this.Units[index] = updatedUnit; 
+        }
+        this.UnitForm.reset(); 
+        this.setActiveTab('read'); 
+      },
+      error => {
+        console.error('Error updating Unit:', error);
+      }
+    );
+  }
+
+  
+  deleteUnit(UnitName: string): void {
+    this.UnitService.deleteUnit(UnitName).subscribe(
+      () => {
+        this.Units = this.Units.filter(Unit => Unit.UnitName !== UnitName); 
+      },
+      error => {
+        console.error('Error deleting Unit:', error);
+      }
+    );
+  }
+
+  
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  
+  setActiveTab(tab: string): void {
+    this.activeTab = tab;
+    this.isMenuOpen = false; 
+  }
+
+  
+  tabClass(tab: string): string {
+    return this.activeTab === tab ? 'text-black border-b-2 border-black' : 'text-gray-700';
+  }
+
+  
+  selectUnitForUpdate(Unit: Unit): void {
+    this.UnitForm.patchValue(Unit); 
+    this.setActiveTab('update'); 
   }
 }

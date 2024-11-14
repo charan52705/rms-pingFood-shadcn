@@ -10,31 +10,53 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } 
   styleUrl: './cities.component.css'
 })
 export class CitiesComponent {
-  cityForm: FormGroup;
+  cityForm!: FormGroup;
   isSubmitting: boolean = false;
+  cities: any[] = [];  // Array to store cities
+  activeTab: string = 'create';  // Default active tab
+  isMenuOpen: boolean = false;   // Controls the mobile menu visibility
 
-  constructor(private fb: FormBuilder) {
-    // Define form structure with validation rules
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;  // Toggles the menu visibility
+  }
+
+  constructor(private fb: FormBuilder) {}
+
+  ngOnInit(): void {
+    this.initForm();
+  }
+  tabClass(tab: string): string {
+    return this.activeTab === tab
+      ? 'border-b-2 border-black text-black'
+      : 'text-gray-600 hover:text-black';
+  }
+  initForm(): void {
     this.cityForm = this.fb.group({
       cityName: ['', [Validators.required, Validators.minLength(2)]],
       cityState: ['', [Validators.required, Validators.minLength(2)]],
       cityCountry: ['', [Validators.required, Validators.minLength(2)]],
-      postalCode: ['', [Validators.required, Validators.pattern(/^\d{5}(-\d{4})?$/)]], // Postal code pattern
+      postalCode: ['', [Validators.required, Validators.pattern(/^\d{5}$/)]]
     });
   }
 
-  // Handle form submission
-  onSubmit() {
+  setActiveTab(tab: string): void {
+    this.activeTab = tab;
+  }
+
+  onSubmit(): void {
     if (this.cityForm.invalid) {
       return;
     }
 
     this.isSubmitting = true;
-    // Simulate an API call for adding a city
+
+    // Simulate a service call to add city
     setTimeout(() => {
+      const newCity = this.cityForm.value;
+      this.cities.push(newCity);
+      this.cityForm.reset();
       this.isSubmitting = false;
-      console.log('City added:', this.cityForm.value);
-      // Here you can call the service to save the city details to a backend
-    }, 2000);
+      this.setActiveTab('read');
+    }, 1000);
   }
 }

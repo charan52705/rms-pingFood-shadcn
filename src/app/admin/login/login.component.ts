@@ -21,8 +21,8 @@ export class LoginComponent {
   async onSubmit() {
     try {
       const response = await this.authService.login(this.email, this.password);
-      localStorage.setItem('token', response.access_token); // Save JWT token
-      this.router.navigate(['/admin']); // Redirect to admin page on success
+      localStorage.setItem('token', response.access_token); 
+      this.router.navigate(['/admin']); 
     } catch (error) {
       this.errorMessage = 'Invalid email or password';
     }

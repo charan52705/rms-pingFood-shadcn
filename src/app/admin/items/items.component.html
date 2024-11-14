@@ -1,90 +1,145 @@
-<div class="max-w-2xl mx-auto p-4 bg-white items-center justify-center flex flex-col h-[100vh]">
+<div class="max-w-4xl mx-auto p-6 bg-white flex items-center justify-center flex-col h-full">
     <!-- Header Section -->
     <div class="w-full text-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-900">Add New Item</h1>
-      <p class="mt-2 text-gray-600">Please provide the details of the new item.</p>
+      <h1 class="text-3xl font-bold text-gray-900">Item Management</h1>
+      <p class="mt-2 text-gray-600">Manage item information through CRUD operations.</p>
     </div>
   
-    <!-- Form Section -->
-    <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="space-y-6 w-full max-w-xl mx-auto">
-      <!-- Item Name -->
-      <div class="form-group">
-        <label for="itemName" class="block text-lg font-semibold text-gray-700">Item Name</label>
-        <input 
-          id="itemName" 
-          formControlName="itemName" 
-          type="text" 
-          placeholder="Example Item" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="itemForm.controls['itemName'].invalid && itemForm.controls['itemName'].touched" class="text-sm text-red-500">
-          Item Name is required and should be at least 2 characters long.
-        </div>
-      </div>
-  
-      <!-- Item Description -->
-      <div class="form-group">
-        <label for="itemDescription" class="block text-lg font-semibold text-gray-700">Item Description</label>
-        <textarea 
-          id="itemDescription" 
-          formControlName="itemDescription" 
-          placeholder="Describe the item" 
-          rows="4" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"></textarea>
-        <div *ngIf="itemForm.controls['itemDescription'].invalid && itemForm.controls['itemDescription'].touched" class="text-sm text-red-500">
-          Item Description is required and should be at least 10 characters long.
-        </div>
-      </div>
-  
-      <!-- Item Price -->
-      <div class="form-group">
-        <label for="itemPrice" class="block text-lg font-semibold text-gray-700">Item Price</label>
-        <input 
-          id="itemPrice" 
-          formControlName="itemPrice" 
-          type="text" 
-          placeholder="99.99" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="itemForm.controls['itemPrice'].invalid && itemForm.controls['itemPrice'].touched" class="text-sm text-red-500">
-          Price is required and must be a valid number with up to two decimal places.
-        </div>
-      </div>
-  
-      <!-- Item Category -->
-      <div class="form-group">
-        <label for="itemCategory" class="block text-lg font-semibold text-gray-700">Item Category</label>
-        <input 
-          id="itemCategory" 
-          formControlName="itemCategory" 
-          type="text" 
-          placeholder="Electronics" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="itemForm.controls['itemCategory'].invalid && itemForm.controls['itemCategory'].touched" class="text-sm text-red-500">
-          Category is required and should be at least 2 characters long.
-        </div>
-      </div>
-  
-      <!-- Item Quantity -->
-      <div class="form-group">
-        <label for="itemQuantity" class="block text-lg font-semibold text-gray-700">Item Quantity</label>
-        <input 
-          id="itemQuantity" 
-          formControlName="itemQuantity" 
-          type="number" 
-          placeholder="1" 
-          min="1" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="itemForm.controls['itemQuantity'].invalid && itemForm.controls['itemQuantity'].touched" class="text-sm text-red-500">
-          Quantity is required and must be at least 1.
-        </div>
-      </div>
-  
-      <!-- Submit Button -->
-      <button 
-        type="submit" 
-        [disabled]="isSubmitting" 
-        class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 hover:bg-black disabled:bg-black">
-        {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+    <!-- Mobile Menu Icon (visible on small screens) -->
+    <div class="md:hidden flex justify-end w-full mb-4">
+      <button (click)="toggleMenu()" class="text-2xl">
+        <i class="fas fa-bars"></i> <!-- Font Awesome or custom icon -->
       </button>
-    </form>
+    </div>
+  
+    <!-- Mobile Menu (Hidden by default, shown when clicked) -->
+    <div *ngIf="isMenuOpen" class="w-full md:hidden space-y-4 bg-white shadow-md p-4 rounded-lg">
+      <button (click)="setActiveTab('create')" class="block text-lg font-medium text-gray-700 hover:text-black">
+        Add Item
+      </button>
+      <button (click)="setActiveTab('read')" class="block text-lg font-medium text-gray-700 hover:text-black">
+        Show Items
+      </button>
+      <button (click)="setActiveTab('update')" class="block text-lg font-medium text-gray-700 hover:text-black">
+        Update Item
+      </button>
+      <button (click)="setActiveTab('delete')" class="block text-lg font-medium text-gray-700 hover:text-black">
+        Delete Item
+      </button>
+    </div>
+  
+    <!-- Tabs Section (visible on larger screens) -->
+    <div class="w-full hidden md:flex flex-col items-center">
+      <!-- Tab Headers -->
+      <div class="flex justify-center space-x-4 border-b">
+        <button
+          (click)="setActiveTab('create')"
+          [class]="tabClass('create')"
+          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black transition-all duration-200 ease-in-out transform hover:scale-105"
+        >
+          Add Item
+        </button>
+        <button
+          (click)="setActiveTab('read')"
+          [class]="tabClass('read')"
+          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opacity-50"
+        >
+          Show Items
+        </button>
+        <button
+          (click)="setActiveTab('update')"
+          [class]="tabClass('update')"
+          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opacity-50"
+        >
+          Update Item
+        </button>
+        <button
+          (click)="setActiveTab('delete')"
+          [class]="tabClass('delete')"
+          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opacity-50"
+        >
+          Delete Item
+        </button>
+      </div>
+    </div>
+  
+    <!-- Tab Contents -->
+    <div class="tabs-content mt-8 space-y-8 w-full">
+      <!-- Create Tab -->
+      <div *ngIf="activeTab === 'create'" class="tab-content w-full md:w-3/4 mx-auto">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Add New Item</h2>
+        <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <div class="form-group">
+            <label for="itemName" class="block text-lg font-semibold text-gray-700">Item Name</label>
+            <input
+              id="itemName"
+              formControlName="itemName"
+              type="text"
+              placeholder="Item Name"
+              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            />
+            <div *ngIf="itemForm.controls['itemName'].invalid && itemForm.controls['itemName'].touched" class="text-sm text-red-500">
+              Item Name is required and should be at least 2 characters long.
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="itemDescription" class="block text-lg font-semibold text-gray-700">Description</label>
+            <textarea
+              id="itemDescription"
+              formControlName="itemDescription"
+              rows="4"
+              placeholder="Item Description"
+              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            ></textarea>
+            <div *ngIf="itemForm.controls['itemDescription'].invalid && itemForm.controls['itemDescription'].touched" class="text-sm text-red-500">
+              Description is required.
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="itemPrice" class="block text-lg font-semibold text-gray-700">Price</label>
+            <input
+              id="itemPrice"
+              formControlName="itemPrice"
+              type="number"
+              placeholder="10.00"
+              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            />
+            <div *ngIf="itemForm.controls['itemPrice'].invalid && itemForm.controls['itemPrice'].touched" class="text-sm text-red-500">
+              Price is required and should be a valid number.
+            </div>
+          </div>
+  
+          <button type="submit" [disabled]="isSubmitting" class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold">
+            {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+          </button>
+        </form>
+      </div>
+  
+      <!-- Read Tab -->
+      <div *ngIf="activeTab === 'read'" class="tab-content w-full md:w-3/4 mx-auto">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Item List</h2>
+        <ul *ngIf="items.length > 0" class="space-y-2">
+          <li *ngFor="let item of items" class="border p-4 rounded-lg shadow-sm">
+            <p class="text-lg font-semibold">{{ item.itemName }}</p>
+            <p class="text-gray-600">{{ item.itemDescription }} - ${{ item.itemPrice }}</p>
+          </li>
+        </ul>
+        <p *ngIf="items.length === 0" class="text-gray-600">No items available.</p>
+      </div>
+  
+      <!-- Update Tab -->
+      <div *ngIf="activeTab === 'update'" class="tab-content w-full md:w-3/4 mx-auto">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Update Item</h2>
+        <p class="text-gray-600">Select an item to update its details.</p>
+      </div>
+  
+      <!-- Delete Tab -->
+      <div *ngIf="activeTab === 'delete'" class="tab-content w-full md:w-3/4 mx-auto">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Delete Item</h2>
+        <p class="text-gray-600">Select an item to delete from the list.</p>
+      </div>
+    </div>
   </div>
   

@@ -1,61 +1,144 @@
-<div class="max-w-2xl mx-auto p-4 bg-white items-center justify-center flex flex-col h-[100vh]">
-    <!-- Header Section -->
-    <div class="w-full text-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-900">Add New Unit</h1>
-      <p class="mt-2 text-gray-600">Please provide the details of the new unit.</p>
-    </div>
-  
-    <!-- Form Section -->
-    <form [formGroup]="unitForm" (ngSubmit)="onSubmit()" class="space-y-6 w-full max-w-xl mx-auto">
-      <!-- Unit Name -->
-      <div class="form-group">
-        <label for="unitName" class="block text-lg font-semibold text-gray-700">Unit Name</label>
-        <input 
-          id="unitName" 
-          formControlName="unitName" 
-          type="text" 
-          placeholder="Main Unit" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="unitForm.controls['unitName'].invalid && unitForm.controls['unitName'].touched" class="text-sm text-red-500">
-          Unit Name is required and should be at least 3 characters long.
-        </div>
-      </div>
-  
-      <!-- Unit Abbreviation -->
-      <div class="form-group">
-        <label for="unitAbbreviation" class="block text-lg font-semibold text-gray-700">Unit Abbreviation</label>
-        <input 
-          id="unitAbbreviation" 
-          formControlName="unitAbbreviation" 
-          type="text" 
-          placeholder="MU" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="unitForm.controls['unitAbbreviation'].invalid && unitForm.controls['unitAbbreviation'].touched" class="text-sm text-red-500">
-          Unit Abbreviation is required and should be alphanumeric (1-5 characters).
-        </div>
-      </div>
-  
-      <!-- Associated State -->
-      <div class="form-group">
-        <label for="associatedState" class="block text-lg font-semibold text-gray-700">Associated State</label>
-        <input 
-          id="associatedState" 
-          formControlName="associatedState" 
-          type="text" 
-          placeholder="California" 
-          class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
-        <div *ngIf="unitForm.controls['associatedState'].invalid && unitForm.controls['associatedState'].touched" class="text-sm text-red-500">
-          Associated State is required and should be at least 3 characters long.
-        </div>
-      </div>
-  
-      <!-- Submit Button -->
-      <button 
-        type="submit" 
-        [disabled]="isSubmitting" 
-        class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 hover:bg-black disabled:bg-black">
-        {{ isSubmitting ? 'Submitting...' : 'Submit' }}
-      </button>
-    </form>
+<div class="max-w-4xl mx-auto p-6 bg-white flex items-center justify-center flex-col h-full">
+  <!-- Header Section -->
+  <div class="w-full text-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Unit Management</h1>
+    <p class="mt-2 text-gray-600">Manage Unit information through CRUD operations.</p>
   </div>
-  
+
+  <!-- Mobile Menu Icon (visible on small screens) -->
+  <div class="md:hidden flex justify-end w-full mb-4">
+    <button (click)="toggleMenu()" class="text-2xl">
+      <i class="fas fa-bars"></i> <!-- Font Awesome or custom icon -->
+    </button>
+  </div>
+
+  <!-- Mobile Menu (Hidden by default, shown when clicked) -->
+  <div *ngIf="isMenuOpen" class="w-full md:hidden space-y-4 bg-white shadow-md p-4 rounded-lg">
+    <button (click)="setActiveTab('create')" class="block text-lg font-medium text-gray-700 hover:text-black transition-all duration-200 ease-in-out transform hover:scale-105">
+      Add Unit
+    </button>
+    <button (click)="setActiveTab('read')" class="block text-lg font-medium text-gray-700 hover:text-black transition-all duration-200 ease-in-out transform hover:scale-105">
+      Show Units
+    </button>
+    <button (click)="setActiveTab('update')" class="block text-lg font-medium text-gray-700 hover:text-black transition-all duration-200 ease-in-out transform hover:scale-105">
+      Update Unit
+    </button>
+    <button (click)="setActiveTab('delete')" class="block text-lg font-medium text-gray-700 hover:text-black transition-all duration-200 ease-in-out transform hover:scale-105">
+      Delete Unit
+    </button>
+  </div>
+
+  <!-- Tabs Section (visible on larger screens) -->
+  <div class="w-full hidden md:flex flex-col Units-center">
+    <!-- Tab Headers -->
+    <div class="flex justify-center space-x-4 border-b">
+      <button
+        (click)="setActiveTab('create')"
+        [class]="tabClass('create')"
+        class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black transition-all duration-200 ease-in-out transform hover:scale-105"
+      >
+        Add Unit
+      </button>
+      <button
+        (click)="setActiveTab('read')"
+        [class]="tabClass('read')"
+        class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opacity-50 transition-all duration-200 ease-in-out transform hover:scale-105"
+      >
+        Show Units
+      </button>
+      <button
+        (click)="setActiveTab('update')"
+        [class]="tabClass('update')"
+        class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opacity-50 transition-all duration-200 ease-in-out transform hover:scale-105"
+      >
+        Update Unit
+      </button>
+      <button
+        (click)="setActiveTab('delete')"
+        [class]="tabClass('delete')"
+        class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opacity-50 transition-all duration-200 ease-in-out transform hover:scale-105"
+      >
+        Delete Unit
+      </button>
+    </div>
+  </div>
+
+  <!-- Tab Contents -->
+  <div class="tabs-content mt-8 space-y-8 w-full">
+    <!-- Create Tab -->
+    <div *ngIf="activeTab === 'create'" class="tab-content w-full md:w-3/4 mx-auto">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Add New Unit</h2>
+      <form [formGroup]="UnitForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <div class="form-group">
+          <label for="UnitName" class="block text-lg font-semibold text-gray-700">Unit Name</label>
+          <input
+            id="UnitName"
+            formControlName="UnitName"
+            type="text"
+            placeholder="Unit Name"
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+          />
+          <div *ngIf="UnitForm.controls['UnitName'].invalid && UnitForm.controls['UnitName'].touched" class="text-sm text-red-500">
+            Unit Name is required and should be at least 2 characters long.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="UnitDescription" class="block text-lg font-semibold text-gray-700">Description</label>
+          <textarea
+            id="UnitDescription"
+            formControlName="UnitDescription"
+            rows="4"
+            placeholder="Unit Description"
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+          ></textarea>
+          <div *ngIf="UnitForm.controls['UnitDescription'].invalid && UnitForm.controls['UnitDescription'].touched" class="text-sm text-red-500">
+            Description is required.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="UnitPrice" class="block text-lg font-semibold text-gray-700">Price</label>
+          <input
+            id="UnitPrice"
+            formControlName="UnitPrice"
+            type="number"
+            placeholder="10.00"
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+          />
+          <div *ngIf="UnitForm.controls['UnitPrice'].invalid && UnitForm.controls['UnitPrice'].touched" class="text-sm text-red-500">
+            Price is required and should be a valid number.
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="isSubmitting" class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold">
+          {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+        </button>
+      </form>
+    </div>
+
+    <!-- Read Tab -->
+    <div *ngIf="activeTab === 'read'" class="tab-content w-full md:w-3/4 mx-auto">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4">Unit List</h2>
+      <ul *ngIf="Units.length > 0" class="space-y-2">
+        <li *ngFor="let Unit of Units" class="border p-4 rounded-lg shadow-sm">
+          <p class="text-lg font-semibold">{{ Unit.UnitName }}</p>
+          <p class="text-gray-600">{{ Unit.UnitDescription }} - ${{ Unit.UnitPrice }}</p>
+        </li>
+      </ul>
+      <p *ngIf="Units.length === 0" class="text-gray-600">No Units available.</p>
+    </div>
+
+    <!-- Update Tab -->
+    <div *ngIf="activeTab === 'update'" class="tab-content w-full md:w-3/4 mx-auto">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4">Update Unit</h2>
+      <p class="text-gray-600">Select an Unit to update its details.</p>
+    </div>
+
+    <!-- Delete Tab -->
+    <div *ngIf="activeTab === 'delete'" class="tab-content w-full md:w-3/4 mx-auto">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4">Delete Unit</h2>
+      <p class="text-gray-600">Select an Unit to delete from the list.</p>
+    </div>
+  </div>
+</div>

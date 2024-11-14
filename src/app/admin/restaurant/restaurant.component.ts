@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { RestaurantService, Restaurant } from '../../services/restaurant.service';
+
 
 
 @Component({
@@ -11,32 +13,116 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } 
   styleUrl: './restaurant.component.css'
 })
 export class RestaurantComponent {
-  restaurantForm: FormGroup;
+  RestaurantForm: FormGroup;
   isSubmitting: boolean = false;
+  activeTab: string = 'create'; 
+  isMenuOpen: boolean = false; 
 
-  constructor(private fb: FormBuilder) {
-    // Define form structure with validation rules
-    this.restaurantForm = this.fb.group({
-      restaurantName: ['', [Validators.required, Validators.minLength(3)]],
-      restaurantAddress: ['', [Validators.required, Validators.minLength(5)]],
-      phoneNumber: ['', [Validators.required, Validators.pattern(/^(\+?[1-9]{1,4})?(\d{10})$/)]],  // Phone number validation
-      cuisineType: ['', [Validators.required, Validators.minLength(2)]],
-      openingHours: ['', [Validators.required, Validators.minLength(5)]],
+  
+  Restaurants: Restaurant[] = [];
+
+  constructor(private fb: FormBuilder, private RestaurantService: RestaurantService) {
+    
+    this.RestaurantForm = this.fb.group({
+      RestaurantName: ['', [Validators.required, Validators.minLength(2)]],
+      RestaurantDescription: ['', [Validators.required]],
+      RestaurantPrice: ['', [Validators.required, Validators.min(0.01)]]
     });
   }
 
-  // Handle form submission
-  onSubmit() {
-    if (this.restaurantForm.invalid) {
-      return;
-    }
+  ngOnInit(): void {
+    
+    this.loadRestaurants();
+  }
 
-    this.isSubmitting = true;
-    // Simulate an API call for adding a restaurant
-    setTimeout(() => {
-      this.isSubmitting = false;
-      console.log('Restaurant added:', this.restaurantForm.value);
-      // Here you can call the service to save the restaurant details to a backend
-    }, 2000);
+  
+  loadRestaurants(): void {
+    this.RestaurantService.getRestaurants().subscribe(
+      Restaurants => {
+        this.Restaurants = Restaurants;
+      },
+      error => {
+        console.error('Error fetching Restaurants:', error);
+      }
+    );
+  }
+
+  
+  onSubmit(): void {
+    if (this.RestaurantForm.valid) {
+      this.isSubmitting = true;
+      const formData: Restaurant = this.RestaurantForm.value;
+
+      if (this.activeTab === 'create') {
+        this.addRestaurant(formData);
+      } else if (this.activeTab === 'update') {
+        this.updateRestaurant(formData);
+      }
+    }
+  }
+
+  
+  addRestaurant(Restaurant: Restaurant): void {
+    this.RestaurantService.addRestaurant(Restaurant).subscribe(
+      newRestaurant => {
+        this.Restaurants.push(newRestaurant); 
+        this.RestaurantForm.reset(); 
+        this.setActiveTab('read'); 
+      },
+      error => {
+        console.error('Error adding Restaurant:', error);
+      }
+    );
+  }
+
+  
+  updateRestaurant(Restaurant: Restaurant): void {
+    this.RestaurantService.updateRestaurant(Restaurant).subscribe(
+      updatedRestaurant => {
+        const index = this.Restaurants.findIndex(existingRestaurant => existingRestaurant.RestaurantName === updatedRestaurant.RestaurantName);
+        if (index !== -1) {
+          this.Restaurants[index] = updatedRestaurant; 
+        }
+        this.RestaurantForm.reset(); 
+        this.setActiveTab('read'); 
+      },
+      error => {
+        console.error('Error updating Restaurant:', error);
+      }
+    );
+  }
+
+  
+  deleteRestaurant(RestaurantName: string): void {
+    this.RestaurantService.deleteRestaurant(RestaurantName).subscribe(
+      () => {
+        this.Restaurants = this.Restaurants.filter(Restaurant => Restaurant.RestaurantName !== RestaurantName); 
+      },
+      error => {
+        console.error('Error deleting Restaurant:', error);
+      }
+    );
+  }
+
+  
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  
+  setActiveTab(tab: string): void {
+    this.activeTab = tab;
+    this.isMenuOpen = false; 
+  }
+
+  
+  tabClass(tab: string): string {
+    return this.activeTab === tab ? 'text-black border-b-2 border-black' : 'text-gray-700';
+  }
+
+  
+  selectRestaurantForUpdate(Restaurant: Restaurant): void {
+    this.RestaurantForm.patchValue(Restaurant); 
+    this.setActiveTab('update'); 
   }
 }
