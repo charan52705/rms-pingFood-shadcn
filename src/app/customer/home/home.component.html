@@ -17,24 +17,31 @@
         </div>
 
         <!-- Desktop Menu -->
-        <nav class="hidden md:block">
+        <nav class="hidden md:block flex space-x-4 items-center">
           <ul class="flex space-x-4">
-          
-            <li><a href="/common/login" class="text-white rounded-lg bg-black px-4 py-2 hover:text-gray-100 cursor-pointer">Login</a></li>
+            <li><a href="/common/login" class="text-white rounded-lg bg-black px-4 py-2 hover:text-gray-100 cursor-pointer"> <span><i class="fa fa-sign-in" aria-hidden="true"></i>
+            </span> &nbsp; Login</a></li>
+            <li><a href="/common/register" class="text-white rounded-lg bg-black px-4 py-2 hover:text-gray-100 cursor-pointer"><span><i class="fa fa-user-plus" aria-hidden="true"></i>
+            </span> &nbsp; Register</a></li>
+
           </ul>
+        
         </nav>
       </div>
     </div>
   </header>
 
- <!-- Mobile Menu Dropdown -->
-<div *ngIf="isMobileMenuVisible" class="md:hidden bg-white absolute top-16 left-0 w-full shadow-md z-50">
-  <ul class="flex flex-col space-y-4 px-4 py-6">
-    
-    <li><a href="/common/login" class="text-white rounded-lg bg-black px-4 py-2 hover:text-gray-100 cursor-pointer">Login</a></li>
-  </ul>
-</div>
-
+  <!-- Mobile Menu Dropdown -->
+  <div *ngIf="isMobileMenuVisible" class="md:hidden bg-white absolute top-16 left-0 w-full shadow-md z-50">
+    <ul class="flex flex-col space-y-4 px-4 py-6">
+      <li *ngIf="isUserLoggedIn()" (click)="logout()">
+        <a href="/" class="text-white rounded-lg bg-black px-4 py-2 hover:text-gray-100 cursor-pointer">Logout</a>
+      </li>
+      <li *ngIf="!isUserLoggedIn()">
+        <a href="/common/login" class="text-white rounded-lg bg-black px-4 py-2 hover:text-gray-100 cursor-pointer">Login</a>
+      </li>
+    </ul>
+  </div>
 
   <!-- Main Content -->
   <main>
@@ -53,7 +60,6 @@
       <!-- Down Arrow Positioned at the Bottom -->
       <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
         <a href="#view-items">
-          <!-- Down arrow SVG -->
           <svg class="w-8 h-8 text-black mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
           </svg>
@@ -61,33 +67,16 @@
       </div>
     </section>
     
-
-
     <!-- Featured Dishes Section -->
     <section id="view-items" class="py-16 bg-white">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-3xl font-bold text-center mb-12">Featured Dishes</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          <!-- Example Dish Card -->
-          <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
-            <img src="/assets/images/dish-1.jpg" alt="Dish Name" class="w-full h-48 object-cover">
+          <div *ngFor="let dish of featuredDishes" class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+            <img [src]="'/assets/images/dish-' + (featuredDishes.indexOf(dish) + 1) + '.jpg'" alt="Dish Name" class="w-full h-48 object-cover">
             <div class="p-6">
-              <h3 class="text-xl font-semibold mb-2">Dish Name</h3>
-              <p class="text-black">A brief description of the dish goes here.</p>
-            </div>
-          </div>
-          <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
-            <img src="/assets/images/dish-2.jpg" alt="Dish Name" class="w-full h-48 object-cover">
-            <div class="p-6">
-              <h3 class="text-xl font-semibold mb-2">Dish Name</h3>
-              <p class="text-black">A brief description of the dish goes here.</p>
-            </div>
-          </div>
-          <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
-            <img src="/assets/images/dish-3.jpg" alt="Dish Name" class="w-full h-48 object-cover">
-            <div class="p-6">
-              <h3 class="text-xl font-semibold mb-2">Dish Name</h3>
-              <p class="text-black">A brief description of the dish goes here.</p>
+              <h3 class="text-xl font-semibold mb-2">{{ dish.name }}</h3>
+              <p class="text-black">{{ dish.description }}</p>
             </div>
           </div>
         </div>
@@ -135,22 +124,18 @@
             <h3 class="text-xl font-semibold mb-4">Send us a Message</h3>
             <form #contactForm="ngForm" (ngSubmit)="submitForm(contactForm)" class="space-y-4">
               <div>
-                <label for="name" class="block text-sm font-medium text-black ">Name</label>
-                <input type="text" id="name" name="name" ngModel required
-                       class="mt-1 block px-2 py-2 border-2 border-gray-100 w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-black">
+                <label for="name" class="block text-sm font-medium text-black">Name</label>
+                <input type="text" id="name" name="name" ngModel required class="mt-1 block w-full px-2 py-2 border-2 border-gray-100 rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-black">
               </div>
               <div>
                 <label for="email" class="block text-sm font-medium text-black">Email</label>
-                <input type="email" id="email" name="email" ngModel required email
-                       class="mt-1 block w-full px-2 py-2 border-2 border-gray-100 rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-black">
+                <input type="email" id="email" name="email" ngModel required email class="mt-1 block w-full px-2 py-2 border-2 border-gray-100 rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-black">
               </div>
               <div>
                 <label for="message" class="block text-sm font-medium text-black">Message</label>
-                <textarea id="message" name="message" rows="4" ngModel required
-                          class="mt-1 block w-full px-2 py-2 border-2 border-gray-100 rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-black"></textarea>
+                <textarea id="message" name="message" rows="4" ngModel required class="mt-1 block w-full px-2 py-2 border-2 border-gray-100 rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-black"></textarea>
               </div>
-              <button type="submit" [disabled]="!contactForm.form.valid"
-                      class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-black hover:bg-gray-700 focus:outline-none">
+              <button type="submit" [disabled]="!contactForm.form.valid" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-black hover:bg-gray-700 focus:outline-none">
                 Send Message
               </button>
             </form>

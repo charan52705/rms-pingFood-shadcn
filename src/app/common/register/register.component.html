@@ -1,0 +1,99 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+    <div class="bg-white rounded-lg shadow-md w-full max-w-md p-6">
+      <h2 class="text-2xl font-bold text-center mb-2">Register</h2>
+      <p class="text-center text-gray-600 mb-6">Create an account to get started</p>
+  
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        
+        <!-- User type radio buttons -->
+        <div class="flex justify-center space-x-4 mb-4">
+          <label class="inline-flex items-center">
+            <input type="radio" class="form-radio" formControlName="userType" value="customer">
+            <span class="ml-2">Customer</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="radio" class="form-radio" formControlName="userType" value="admin">
+            <span class="ml-2">Admin</span>
+          </label>
+        </div>
+  
+        <!-- Name field -->
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+          <input id="name" type="text" formControlName="name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-black focus:border-black" placeholder="Enter your full name">
+        </div>
+  
+        <!-- Email field -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <i class="fas fa-envelope text-gray-400"></i>
+            </span>
+            <input id="email" type="email" formControlName="email" class="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-black focus:border-black" placeholder="Enter your email">
+          </div>
+        </div>
+  
+        <!-- Password field -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <i class="fas fa-lock text-gray-400"></i>
+            </span>
+            <input id="password" type="password" formControlName="password" class="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-black focus:border-black" placeholder="Enter your password">
+          </div>
+          
+          <!-- Password Validation Messages -->
+          <div *ngIf="registerForm.get('password')?.touched">
+            <ul class="text-sm mt-2">
+              <li [ngClass]="{
+                'text-red-500': registerForm.get('password')?.hasError('required') && registerForm.get('password')?.touched,
+                'text-green-500': registerForm.get('password')?.hasError('minlength') === null && registerForm.get('password')?.valid
+              }">
+                Password is required and must be at least 6 characters long.
+              </li>
+              <li [ngClass]="{
+                'text-red-500': registerForm.get('password')?.hasError('weakPassword') && registerForm.get('password')?.touched,
+                'text-green-500': !registerForm.get('password')?.hasError('weakPassword') && registerForm.get('password')?.valid
+              }">
+                Password must contain at least one number and one special character.
+              </li>
+            </ul>
+          </div>
+        </div>
+  
+        <!-- Confirm Password field -->
+        <div>
+          <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <i class="fas fa-lock text-gray-400"></i>
+            </span>
+            <input id="confirmPassword" type="password" formControlName="confirmPassword" class="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-black focus:border-black" placeholder="Confirm your password">
+          </div>
+  
+          <!-- Confirm Password Validation Message -->
+          <div *ngIf="registerForm.get('confirmPassword')?.touched">
+            <p [ngClass]="{
+              'text-red-500': registerForm.get('confirmPassword')?.hasError('mismatch') && registerForm.get('confirmPassword')?.touched,
+              'text-green-500': !registerForm.get('confirmPassword')?.hasError('mismatch') && registerForm.get('confirmPassword')?.touched
+            }" class="text-sm mt-2">
+              Passwords must match.
+            </p>
+          </div>
+        </div>
+  
+        <!-- Submit button -->
+        <button type="submit" [disabled]="registerForm.invalid" class="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:opacity-50">
+          Register as {{ registerForm.get('userType')?.value | titlecase }}
+        </button>
+  
+        <!-- Conditional message for login -->
+        <div class="text-center text-black mt-4">
+          <p>Already have an account? <span (click)="redirectToLogin()" class="cursor-pointer underline">Login as {{ registerForm.get('userType')?.value | titlecase }}.</span></p>
+        </div>
+      </form>
+    </div>
+  </div>
+  

@@ -29,7 +29,8 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const { email, password, userType } = this.loginForm.value; // Get the value of userType from the form control
       console.log('Form submitted', this.loginForm.value);
-      this.authService.login(userType);
+      this.authService.getUserData(email)
+      this.authService.setUserType(userType)
 
       // Redirect based on the selected userType
       if (userType === 'customer') {
@@ -44,6 +45,6 @@ export class LoginComponent implements OnInit {
 
   redirectToRegister() {
     // Logic for redirection to the register page
-    console.log('Redirecting to register...');
+this.router.navigate(['/common/register'])
   }
 }

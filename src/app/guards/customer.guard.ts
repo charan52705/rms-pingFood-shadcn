@@ -12,9 +12,9 @@ export class CustomerGuard implements CanActivate {
 
   canActivate(): boolean {
     if (this.authService.isAuthenticated()) {
-      return true;  // Allow authenticated users
+      return true;  
     } else {
-      this.router.navigate(['/common/login']);  // Redirect unauthenticated users to login
+      this.router.navigate(['']);  
       return false;
     }
   }
