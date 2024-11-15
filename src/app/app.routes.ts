@@ -9,8 +9,10 @@ export const routes: Routes = [
   { path: 'common/login', loadComponent: () => import('./common/login/login.component').then(m => m.LoginComponent) },
   { path: 'customer/register', loadComponent: () => import('./customer/register/register.component').then(m => m.RegisterComponent) },
   { path: 'customer/home', loadComponent: () => import('./customer/home/home.component').then(m => m.HomeComponent), canActivate: [CustomerGuard] },
-
-
+  
+  // Profile Route (Protect if needed)
+  { path: 'profile', component: ProfileComponent, canActivate: [CustomerGuard] }, // Protect with CustomerGuard
+  
   // Admin Routes
   { path: 'admin/home', loadComponent: () => import('./home/home.component').then(m => m.HomeComponent), canActivate: [AdminGuard] },
   { path: 'admin/register', loadComponent: () => import('./admin/registration/registration.component').then(m => m.RegistrationComponent), canActivate: [AdminGuard] },
@@ -30,6 +32,4 @@ export const routes: Routes = [
   // Common Routes
   { path: 'find/food', loadComponent: () => import('./common/find-food/find-food.component').then(m => m.FindFoodComponent) },
   { path: 'find/hotel', loadComponent: () => import('./common/find-hotel/find-hotel.component').then(m => m.FindHotelComponent) },
-
-  {path:'profile', component:ProfileComponent}
 ];

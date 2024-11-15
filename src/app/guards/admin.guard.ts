@@ -12,19 +12,11 @@ export class AdminGuard implements CanActivate {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> | Promise<boolean> | boolean {
-    const userRole = localStorage.getItem('userRole');
-    
-    if (userRole === 'admin') {
-      console.log('This is  admin')
-      this.router.navigate(['']);  
-      return true;  
+   canActivate(): boolean {
+    if (this.authService.isAdmin()) {
+      return true;  // Allow admin users
     } else {
-      console.log('This is  not admin')
-      this.router.navigate(['']);  
+      this.router.navigate(['/common/login']);  // Redirect non-admins to login
       return false;
     }
   }

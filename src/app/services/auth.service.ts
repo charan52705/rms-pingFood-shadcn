@@ -12,6 +12,7 @@ export class AuthService {
     
     const storedRole = localStorage.getItem('userRole');
     this.userRole.next(storedRole);
+    
   }
 
   login(role: string) {
@@ -30,6 +31,7 @@ export class AuthService {
   }
 
   isAdmin() {
+    console.log(this.userRole.getValue())
     return this.userRole.getValue() === 'admin';
   }
 

@@ -10,25 +10,12 @@ export class CustomerGuard implements CanActivate {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> | Promise<boolean> | boolean {
-    
-    if (this.authService.isCustomer()) {
-      console.log('Access granted: Customer route');
-      return true;  
+  canActivate(): boolean {
+    if (this.authService.isAuthenticated()) {
+      return true;  // Allow authenticated users
     } else {
-      console.log('Access denied: Not a customer');
-      
-      
-      if (this.authService.isAdmin()) {
-        this.router.navigate(['/admin/home']);  
-      } else {
-        
-        this.router.navigate(['/customer/register']);
-      }
-      return false;  
+      this.router.navigate(['/common/login']);  // Redirect unauthenticated users to login
+      return false;
     }
   }
 }

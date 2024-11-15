@@ -23,8 +23,8 @@ interface Order {
 export class ProfileComponent {
   isMobileSidebarOpen = false;
   activeComponent: any = OrderstatusComponent;
-  isLoggedIn: boolean = false; // Update based on your auth logic
-  user: { name: string, avatar: string } | null = null; // User data
+  isLoggedIn: boolean = false; 
+  user: { name: string, avatar: string } | null = null; 
   Name:string = 'Divya'
 
   navItems = [
@@ -39,12 +39,12 @@ export class ProfileComponent {
     { icon: 'fa-solid fa-credit-card', label: 'Payment', component: PaymentComponent },
   ];
   login() {
-    // Trigger the login process (e.g., show a modal, redirect to login page)
+    
     console.log('Redirecting to login...');
-    this.isLoggedIn = true; // Update this after successful login
+    this.isLoggedIn = true; 
     this.user = {
       name: 'John Doe',
-      avatar: 'https://example.com/john-doe-avatar.jpg' // Example avatar URL
+      avatar: 'https:'
     };
   }
   setActiveComponent(component: any) {
@@ -55,6 +55,29 @@ export class ProfileComponent {
     this.isMobileSidebarOpen = !this.isMobileSidebarOpen;
   }
   closeMobileSidebar() {
-    this.isMobileSidebarOpen = false; // Close the sidebar when a menu item is clicked
+    this.isMobileSidebarOpen = false; 
+  }
+  isUserSettingsMenuOpen = false; 
+
+  
+  toggleUserSettingsMenu() {
+    this.isUserSettingsMenuOpen = !this.isUserSettingsMenuOpen;
+  }
+
+  
+  openUserSettings() {
+    this.toggleUserSettingsMenu()
+    
+    console.log('User Settings clicked');
+  }
+
+  openProfile() {
+    this.toggleUserSettingsMenu()
+    
+    console.log('Profile clicked');
+  }
+  logout() {
+    this.toggleUserSettingsMenu()
+    console.log('Logout clicked');
   }
 }
