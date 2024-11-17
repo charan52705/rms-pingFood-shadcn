@@ -1,8 +1,8 @@
 <div class="max-w-4xl mx-auto p-6 bg-white flex items-center justify-center flex-col h-full">
   <!-- Header Section -->
   <div class="w-full text-center mb-8">
-    <h1 class="text-3xl font-bold text-gray-900">Branch Management</h1>
-    <p class="mt-2 text-gray-600">Manage branch information through CRUD operations.</p>
+    <h1 class="text-3xl font-bold text-gray-900">Restaurant Management</h1>
+    <p class="mt-2 text-gray-600">Manage restaurant information through CRUD operations.</p>
   </div>
 
   <!-- Mobile Menu Icon -->
@@ -14,87 +14,87 @@
 
   <!-- Mobile Menu -->
   <div *ngIf="isMenuOpen" class="w-full md:hidden space-y-4 bg-white shadow-md p-4 rounded-lg">
-    <button (click)="setActiveTab('create')" class="block text-lg font-medium text-gray-700 hover:text-black">Add Branch</button>
-    <button (click)="setActiveTab('read')" class="block text-lg font-medium text-gray-700 hover:text-black">Show Branches</button>
-    <button (click)="setActiveTab('update')" class="block text-lg font-medium text-gray-700 hover:text-black">Update Branch</button>
-    <button (click)="setActiveTab('delete')" class="block text-lg font-medium text-gray-700 hover:text-black">Delete Branch</button>
+    <button (click)="setActiveTab('create')" class="block text-lg font-medium text-gray-700 hover:text-black">Add Restaurant</button>
+    <button (click)="setActiveTab('read')" class="block text-lg font-medium text-gray-700 hover:text-black">Show Restaurants</button>
+    <button (click)="setActiveTab('update')" class="block text-lg font-medium text-gray-700 hover:text-black">Update Restaurant</button>
+    <button (click)="setActiveTab('delete')" class="block text-lg font-medium text-gray-700 hover:text-black">Delete Restaurant</button>
   </div>
 
   <!-- Tabs Section -->
   <div class="w-full hidden md:flex flex-col items-center">
     <div class="flex justify-center space-x-4 border-b">
       <button (click)="setActiveTab('create')" [class]="tabClass('create')" class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black">
-        Add Branch
+        Add Restaurant
       </button>
       <button (click)="setActiveTab('read')" [class]="tabClass('read')" class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black">
-        Show Branches
+        Show Restaurants
       </button>
       <button (click)="setActiveTab('update')" [class]="tabClass('update')" class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black">
-        Update Branch
+        Update Restaurant
       </button>
       <button (click)="setActiveTab('delete')" [class]="tabClass('delete')" class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black">
-        Delete Branch
+        Delete Restaurant
       </button>
     </div>
   </div>
 
   <!-- Tab Contents -->
   <div class="tabs-content mt-8 space-y-8 w-full">
-    <!-- Create Branch Tab -->
+    <!-- Create Restaurant Tab -->
     <div *ngIf="activeTab === 'create'" class="tab-content w-full md:w-3/4 mx-auto">
-      <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Add New Branch</h2>
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Add New Restaurant</h2>
       <form [formGroup]="branchForm" (ngSubmit)="onSubmit()" class="space-y-6">
-        <!-- Branch ID -->
+        <!-- Restaurant ID -->
         <div class="form-group">
-          <label for="branch_id" class="block text-lg font-semibold text-gray-700">Branch ID</label>
+          <label for="branch_id" class="block text-lg font-semibold text-gray-700">Restaurant ID</label>
           <input id="branch_id" formControlName="branch_id" type="text" class="form-input w-full p-3 border border-gray-300 rounded-lg" [readonly]="true"/>
         </div>
 
-        <!-- Branch Name -->
+        <!-- Restaurant Name -->
         <div class="form-group">
-          <label for="branch_name" class="block text-lg font-semibold text-gray-700">Branch Name</label>
+          <label for="branch_name" class="block text-lg font-semibold text-gray-700">Restaurant Name</label>
           <input id="branch_name" formControlName="branch_name" type="text" class="form-input w-full p-3 border border-gray-300 rounded-lg"/>
           <div *ngIf="branchForm.controls['branch_name'].invalid && branchForm.controls['branch_name'].touched" class="text-sm text-red-500">
-            Branch Name is required and should be at least 2 characters long.
+            Restaurant Name is required and should be at least 2 characters long.
           </div>
         </div>
 
-        <!-- Branch Email -->
+        <!-- Restaurant Email -->
         <div class="form-group">
-          <label for="branch_email" class="block text-lg font-semibold text-gray-700">Branch Email</label>
+          <label for="branch_email" class="block text-lg font-semibold text-gray-700">Restaurant Email</label>
           <input id="branch_email" formControlName="branch_email" type="email" class="form-input w-full p-3 border border-gray-300 rounded-lg"/>
           <div *ngIf="branchForm.controls['branch_email'].invalid && branchForm.controls['branch_email'].touched" class="text-sm text-red-500">
             Valid email is required.
           </div>
         </div>
 
-        <!-- Branch Phone -->
+        <!-- Restaurant Phone -->
         <div class="form-group">
-          <label for="branch_phone" class="block text-lg font-semibold text-gray-700">Branch Phone</label>
+          <label for="branch_phone" class="block text-lg font-semibold text-gray-700">Restaurant Phone</label>
           <input id="branch_phone" formControlName="branch_phone" type="text" class="form-input w-full p-3 border border-gray-300 rounded-lg"/>
         </div>
 
-        <!-- Branch Website -->
+        <!-- Restaurant Website -->
         <div class="form-group">
-          <label for="branch_website" class="block text-lg font-semibold text-gray-700">Branch Website</label>
+          <label for="branch_website" class="block text-lg font-semibold text-gray-700">Restaurant Website</label>
           <input id="branch_website" formControlName="branch_website" type="url" class="form-input w-full p-3 border border-gray-300 rounded-lg"/>
         </div>
 
-        <!-- Branch Description -->
+        <!-- Restaurant Description -->
         <div class="form-group">
-          <label for="branch_desc" class="block text-lg font-semibold text-gray-700">Branch Description</label>
+          <label for="branch_desc" class="block text-lg font-semibold text-gray-700">Restaurant Description</label>
           <textarea id="branch_desc" formControlName="branch_desc" class="form-input w-full p-3 border border-gray-300 rounded-lg"></textarea>
         </div>
 
-        <!-- Branch Added (Date) -->
+        <!-- Restaurant Added (Date) -->
         <div class="form-group">
-          <label for="branch_added" class="block text-lg font-semibold text-gray-700">Branch Added</label>
+          <label for="branch_added" class="block text-lg font-semibold text-gray-700">Restaurant Added</label>
           <input id="branch_added" formControlName="branch_added" type="date" class="form-input w-full p-3 border border-gray-300 rounded-lg" [value]="todayDate" readonly />
         </div>
 
-        <!-- Branch Active -->
+        <!-- Restaurant Active -->
         <div class="form-group">
-          <label for="branch_active" class="block text-lg font-semibold text-gray-700">Branch Active</label>
+          <label for="branch_active" class="block text-lg font-semibold text-gray-700">Restaurant Active</label>
           <input id="branch_active" formControlName="branch_active" type="checkbox" />
         </div>
 
@@ -107,14 +107,14 @@
       </form>
     </div>
 
-    <!-- Show Branches Tab -->
+    <!-- Show Restaurants Tab -->
     <div *ngIf="activeTab === 'read'" class="tab-content">
-      <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">List of Branches</h2>
-      <input [(ngModel)]="searchQuery" type="text" placeholder="Search Branch" class="w-full p-3 border border-gray-300 rounded-lg mb-6" />
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">List of Restaurants</h2>
+      <input [(ngModel)]="searchQuery" type="text" placeholder="Search Restaurant" class="w-full p-3 border border-gray-300 rounded-lg mb-6" />
     
       <!-- Cards Container -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Card for each branch -->
+        <!-- Card for each restaurant -->
         <div *ngFor="let branch of filteredBranches" class="bg-white hover:shadow-lg rounded-lg overflow-hidden border border-gray-200">
           <div class="p-6">
             <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ branch.branch_name }}</h3>
@@ -135,62 +135,62 @@
       </div>
     </div>
 
-    <!-- Update Branches Tab -->
+    <!-- Update Restaurant Tab -->
     <div *ngIf="activeTab === 'update'" class="tab-content w-full md:w-3/4 mx-auto">
-      <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Update Branch</h2>
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Update Restaurant</h2>
       <form [formGroup]="branchForm" (ngSubmit)="updateBranch()" class="space-y-6">
-        <!-- Branch ID (hidden in the form) -->
+        <!-- Restaurant ID (hidden in the form) -->
         <div class="form-group">
-          <label for="branch_id" class="block text-lg font-semibold text-gray-700">Branch ID</label>
+          <label for="branch_id" class="block text-lg font-semibold text-gray-700">Restaurant ID</label>
           <input id="branch_id" formControlName="branch_id" type="text" class="form-input w-full p-3 border border-gray-300 rounded-lg" [readonly]="true"/>
         </div>
 
-        <!-- Branch Name -->
+        <!-- Restaurant Name -->
         <div class="form-group">
-          <label for="branch_name" class="block text-lg font-semibold text-gray-700">Branch Name</label>
+          <label for="branch_name" class="block text-lg font-semibold text-gray-700">Restaurant Name</label>
           <input id="branch_name" formControlName="branch_name" type="text" class="form-input w-full p-3 border border-gray-300 rounded-lg"/>
           <div *ngIf="branchForm.controls['branch_name'].invalid && branchForm.controls['branch_name'].touched" class="text-sm text-red-500">
-            Branch Name is required and should be at least 2 characters long.
+            Restaurant Name is required and should be at least 2 characters long.
           </div>
         </div>
 
-        <!-- Branch Email -->
+        <!-- Restaurant Email -->
         <div class="form-group">
-          <label for="branch_email" class="block text-lg font-semibold text-gray-700">Branch Email</label>
+          <label for="branch_email" class="block text-lg font-semibold text-gray-700">Restaurant Email</label>
           <input id="branch_email" formControlName="branch_email" type="email" class="form-input w-full p-3 border border-gray-300 rounded-lg"/>
           <div *ngIf="branchForm.controls['branch_email'].invalid && branchForm.controls['branch_email'].touched" class="text-sm text-red-500">
             Valid email is required.
           </div>
         </div>
 
-        <!-- Branch Phone -->
+        <!-- Restaurant Phone -->
         <div class="form-group">
-          <label for="branch_phone" class="block text-lg font-semibold text-gray-700">Branch Phone</label>
+          <label for="branch_phone" class="block text-lg font-semibold text-gray-700">Restaurant Phone</label>
           <input id="branch_phone" formControlName="branch_phone" type="text" class="form-input w-full p-3 border border-gray-300 rounded-lg"/>
         </div>
 
-        <!-- Branch Website -->
+        <!-- Restaurant Website -->
         <div class="form-group">
-          <label for="branch_website" class="block text-lg font-semibold text-gray-700">Branch Website</label>
+          <label for="branch_website" class="block text-lg font-semibold text-gray-700">Restaurant Website</label>
           <input id="branch_website" formControlName="branch_website" type="url" class="form-input w-full p-3 border border-gray-300 rounded-lg"/>
         </div>
 
-        <!-- Branch Description -->
+        <!-- Restaurant Description -->
         <div class="form-group">
-          <label for="branch_desc" class="block text-lg font-semibold text-gray-700">Branch Description</label>
+          <label for="branch_desc" class="block text-lg font-semibold text-gray-700">Restaurant Description</label>
           <textarea id="branch_desc" formControlName="branch_desc" class="form-input w-full p-3 border border-gray-300 rounded-lg"></textarea>
         </div>
 
-        <!-- Branch Active -->
+        <!-- Restaurant Active -->
         <div class="form-group">
-          <label for="branch_active" class="block text-lg font-semibold text-gray-700">Branch Active</label>
+          <label for="branch_active" class="block text-lg font-semibold text-gray-700">Restaurant Active</label>
           <input id="branch_active" formControlName="branch_active" type="checkbox"/>
         </div>
 
         <!-- Submit Button -->
         <div class="form-group">
           <button type="submit" [disabled]="isSubmitting" class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold">
-            Update Branch
+            Update Restaurant
           </button>
         </div>
       </form>

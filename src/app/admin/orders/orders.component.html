@@ -2,33 +2,10 @@
   <!-- Header Section -->
   <div class="w-full text-center mb-8">
     <h1 class="text-3xl font-bold text-gray-900">Order Management</h1>
-    <p class="mt-2 text-gray-600">Manage customer orders through CRUD operations.</p>
+    <p class="mt-2 text-gray-600">Manage Order information through CRUD operations.</p>
   </div>
 
-  <!-- Mobile Menu Icon (visible on small screens) -->
-  <div class="md:hidden flex justify-end w-full mb-4">
-    <button (click)="toggleMenu()" class="text-2xl">
-      <i class="fas fa-bars"></i>
-    </button>
-  </div>
-
-  <!-- Mobile Menu (Hidden by default, shown when clicked) -->
-  <div *ngIf="isMenuOpen" class="w-full md:hidden space-y-4 bg-white shadow-md p-4 rounded-lg">
-    <button (click)="setActiveTab('create')" class="block text-lg font-medium text-gray-700 hover:text-black">
-      Add Order
-    </button>
-    <button (click)="setActiveTab('read')" class="block text-lg font-medium text-gray-700 hover:text-black">
-      Show Orders
-    </button>
-    <button (click)="setActiveTab('update')" class="block text-lg font-medium text-gray-700 hover:text-black">
-      Update Order
-    </button>
-    <button (click)="setActiveTab('delete')" class="block text-lg font-medium text-gray-700 hover:text-black">
-      Delete Order
-    </button>
-  </div>
-
-  <!-- Tabs Section (visible on larger screens) -->
+  <!-- Tabs Section -->
   <div class="w-full hidden md:flex flex-col items-center">
     <div class="flex justify-center space-x-4 border-b">
       <button (click)="setActiveTab('create')" [class]="tabClass('create')" class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black">
@@ -48,141 +25,110 @@
 
   <!-- Tab Contents -->
   <div class="tabs-content mt-8 space-y-8 w-full">
-    <!-- Create Tab -->
+
     <div *ngIf="activeTab === 'create'" class="tab-content w-full md:w-3/4 mx-auto">
       <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Add New Order</h2>
-      <form (ngSubmit)="onSubmit()" #orderForm="ngForm" class="space-y-6">
-        
-        <!-- Customer Name -->
+      <form [formGroup]="UserForm" (ngSubmit)="onSubmit()" class="space-y-6">
         <div class="form-group">
-          <label for="customer_name" class="block text-lg font-semibold text-gray-700">Customer Name</label>
-          <input
-            id="customer_name"
-            name="customerName"
-            ngModel
-            type="text"
-            placeholder="John Doe"
-            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-            required
-          />
-          <div *ngIf="orderForm.controls['customerName']?.invalid && orderForm.controls['customerName']?.touched" class="text-sm text-red-500">
-            Customer Name is required.
+          <label for="UserName" class="block text-lg font-semibold text-gray-700">Order Name</label>
+          <input id="UserName" formControlName="UserName" type="text" placeholder="Order  Name" class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+          <div *ngIf="UserForm.controls['UserName'].invalid && UserForm.controls['UserName'].touched" class="text-sm text-red-500">
+            Order Name is required and should be at least 2 characters long.
           </div>
         </div>
 
-        <!-- Customer Email -->
         <div class="form-group">
-          <label for="customer_email" class="block text-lg font-semibold text-gray-700">Customer Email</label>
-          <input
-            id="customer_email"
-            name="customerEmail"
-            ngModel
-            type="email"
-            placeholder="john.doe@example.com"
-            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-            required
-          />
-          <div *ngIf="orderForm.controls['customerEmail']?.invalid && orderForm.controls['customerEmail']?.touched" class="text-sm text-red-500">
-            Valid email is required.
+          <label for="UserState" class="block text-lg font-semibold text-gray-700">Order Description</label>
+          <input id="UserState" formControlName="UserState" type="text" placeholder="Order Description" class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+          <div *ngIf="UserForm.controls['UserState'].invalid && UserForm.controls['UserState'].touched" class="text-sm text-red-500">
+            Order Description is required and should be at least 2 characters long.
           </div>
         </div>
 
-        <!-- Customer Phone -->
         <div class="form-group">
-          <label for="customer_phone" class="block text-lg font-semibold text-gray-700">Customer Phone</label>
-          <input
-            id="customer_phone"
-            name="customerPhone"
-            ngModel
-            type="tel"
-            placeholder="+1234567890"
-            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-            required
-          />
-          <div *ngIf="orderForm.controls['customerPhone']?.invalid && orderForm.controls['customerPhone']?.touched" class="text-sm text-red-500">
-            Phone number is required and should be valid.
+          <label for="UserCountry" class="block text-lg font-semibold text-gray-700">Order Address</label>
+          <input id="UserCountry" formControlName="UserCountry" type="text" placeholder="Country" class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+          <div *ngIf="UserForm.controls['UserCountry'].invalid && UserForm.controls['UserCountry'].touched" class="text-sm text-red-500">
+            Address is required and should be at least 10 characters long.
           </div>
         </div>
 
-        <!-- Order Date -->
         <div class="form-group">
-          <label for="order_date" class="block text-lg font-semibold text-gray-700">Order Date</label>
-          <input
-            id="order_date"
-            name="orderDate"
-            ngModel
-            type="date"
-            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-            required
-          />
-          <div *ngIf="orderForm.controls['orderDate']?.invalid && orderForm.controls['orderDate']?.touched" class="text-sm text-red-500">
-            Order date is required.
+          <label for="postalCode" class="block text-lg font-semibold text-gray-700">Postal Code</label>
+          <input id="postalCode" formControlName="postalCode" type="text" placeholder="Postal Code" class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+          <div *ngIf="UserForm.controls['postalCode'].invalid && UserForm.controls['postalCode'].touched" class="text-sm text-red-500">
+            Invalid Postal Code format.
           </div>
         </div>
 
-        <!-- Total Amount -->
-        <div class="form-group">
-          <label for="total_amount" class="block text-lg font-semibold text-gray-700">Order Total</label>
-          <input
-            id="total_amount"
-            name="totalAmount"
-            ngModel
-            type="number"
-            placeholder="200.50"
-            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-            required
-          />
-          <div *ngIf="orderForm.controls['totalAmount']?.invalid && orderForm.controls['totalAmount']?.touched" class="text-sm text-red-500">
-            Total is required and should be a valid number.
-          </div>
-        </div>
-
-        <!-- Order Status -->
-        <div class="form-group">
-          <label for="order_status" class="block text-lg font-semibold text-gray-700">Order Status</label>
-          <input
-            id="order_status"
-            name="orderStatus"
-            ngModel
-            type="text"
-            placeholder="Pending"
-            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-            required
-          />
-          <div *ngIf="orderForm.controls['orderStatus']?.invalid && orderForm.controls['orderStatus']?.touched" class="text-sm text-red-500">
-            Order Status is required.
-          </div>
-        </div>
-
-        <!-- Submit Button -->
         <button type="submit" [disabled]="isSubmitting" class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold">
-          {{ isSubmitting ? 'Submitting...' : 'Submit Order' }}
+          {{ isSubmitting ? 'Submitting...' : 'Submit' }}
         </button>
       </form>
     </div>
+    <!-- Show Users Tab -->
+    <div *ngIf="activeTab === 'read'" class="tab-content">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">List of Users</h2>
+      <input [(ngModel)]="searchQuery" type="text" placeholder="Search User" class="w-full p-3 border border-gray-300 rounded-lg mb-6" />
 
-    <!-- Read Tab -->
-    <div *ngIf="activeTab === 'read'" class="tab-content w-full md:w-3/4 mx-auto">
-      <h2 class="text-2xl font-semibold text-gray-900 mb-4">Orders List</h2>
-      <ul *ngIf="orders.length > 0" class="space-y-2">
-        <li *ngFor="let order of orders" class="border p-4 rounded-lg shadow-sm">
-          <p class="text-lg font-semibold">{{ order.customer.name}}</p>
-          <p class="text-gray-600">Total: ${{ order.total_price }} | Status: {{ order.order_status }}</p>
-        </li>
-      </ul>
-      <p *ngIf="orders.length === 0" class="text-gray-600">No orders available.</p>
+      <!-- Cards Container -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Card for each user -->
+        <div *ngFor="let user of filteredUsers" class="bg-white hover:shadow-lg rounded-lg overflow-hidden border border-gray-200">
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ user.firstname }}</h3>
+            <p class="text-gray-700 mb-2"><strong>Email:</strong> {{ user.email }}</p>
+            <p class="text-gray-700 mb-4"><strong>Phone:</strong> {{ user.phone }}</p>
+
+            <!-- Actions -->
+            <div class="flex space-x-4">
+              <button (click)="onEditUser(user)" class="text-blue-600 hover:text-blue-900 py-1 px-3 border border-blue-600 rounded-lg text-sm">
+                Update
+              </button>
+              <button (click)="onDeleteUser(user.id)" class="text-red-600 hover:text-red-900 py-1 px-3 border border-red-600 rounded-lg text-sm">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Update Tab -->
+    <!-- Update User Tab -->
     <div *ngIf="activeTab === 'update'" class="tab-content w-full md:w-3/4 mx-auto">
-      <h2 class="text-2xl font-semibold text-gray-900 mb-4">Update Order</h2>
-      <p class="text-gray-600">Select an order to update its details.</p>
-    </div>
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Update Order</h2>
+      <form [formGroup]="UserForm" (ngSubmit)="updateUser()" class="space-y-6">
+        <!-- User ID (hidden in the form) -->
+        <div class="form-group">
+          <label for="user_id" class="block text-lg font-semibold text-gray-700">Order ID</label>
+          <input id="user_id" formControlName="user_id" type="text" class="form-input w-full p-3 border border-gray-300 rounded-lg" [readonly]="true"/>
+        </div>
 
-    <!-- Delete Tab -->
-    <div *ngIf="activeTab === 'delete'" class="tab-content w-full md:w-3/4 mx-auto">
-      <h2 class="text-2xl font-semibold text-gray-900 mb-4">Delete Order</h2>
-      <p class="text-gray-600">Select an order to delete from the list.</p>
+        <!-- User Name -->
+        <div class="form-group">
+          <label for="UserName" class="block text-lg font-semibold text-gray-700">Order Description</label>
+          <input id="UserName" formControlName="UserName" type="text" class="form-input w-full p-3 border border-gray-300 rounded-lg"/>
+        </div>
+
+        <!-- User Email -->
+        <div class="form-group">
+          <label for="email" class="block text-lg font-semibold text-gray-700">Order Address</label>
+          <input id="email" formControlName="email" type="email" class="form-input w-full p-3 border border-gray-300 rounded-lg"/>
+        </div>
+
+        <!-- User Phone -->
+        <div class="form-group">
+          <label for="phone" class="block text-lg font-semibold text-gray-700">Pincode</label>
+          <input id="phone" formControlName="phone" type="text" class="form-input w-full p-3 border border-gray-300 rounded-lg"/>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group">
+          <button type="submit" [disabled]="isSubmitting" class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold">
+             Update Order
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

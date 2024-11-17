@@ -1,159 +1,134 @@
 <div class="max-w-4xl mx-auto p-6 bg-white flex items-center justify-center flex-col h-full">
-    <!-- Header Section -->
-    <div class="w-full text-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-900">User Management</h1>
-      <p class="mt-2 text-gray-600">Manage User information through CRUD operations.</p>
-    </div>
-  
-    <!-- Mobile Menu Icon (visible on small screens) -->
-    <div class="md:hidden flex justify-end w-full mb-4">
-      <button (click)="toggleMenu()" class="text-2xl">
-        <i class="fas fa-bars"></i> <!-- Font Awesome or custom icon -->
-      </button>
-    </div>
-  
-    <!-- Mobile Menu (Hidden by default, shown when clicked) -->
-    <div *ngIf="isMenuOpen" class="w-full md:hidden space-y-4 bg-white shadow-md p-4 rounded-lg">
-      <button (click)="setActiveTab('create')" class="block text-lg font-medium text-gray-700 hover:text-black">
+  <!-- Header Section -->
+  <div class="w-full text-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">User Management</h1>
+    <p class="mt-2 text-gray-600">Manage user information through CRUD operations.</p>
+  </div>
+
+  <!-- Tabs Section -->
+  <div class="w-full hidden md:flex flex-col items-center">
+    <div class="flex justify-center space-x-4 border-b">
+      <button (click)="setActiveTab('create')" [class]="tabClass('create')" class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black">
         Add User
       </button>
-      <button (click)="setActiveTab('read')" class="block text-lg font-medium text-gray-700 hover:text-black">
+      <button (click)="setActiveTab('read')" [class]="tabClass('read')" class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black">
         Show Users
       </button>
-      <button (click)="setActiveTab('update')" class="block text-lg font-medium text-gray-700 hover:text-black">
+      <button (click)="setActiveTab('update')" [class]="tabClass('update')" class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black">
         Update User
       </button>
-      <button (click)="setActiveTab('delete')" class="block text-lg font-medium text-gray-700 hover:text-black">
+      <button (click)="setActiveTab('delete')" [class]="tabClass('delete')" class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black">
         Delete User
       </button>
     </div>
-  
-    <!-- Tabs Section (visible on larger screens) -->
-    <div class="w-full hidden md:flex flex-col items-center">
-      <!-- Tab Headers -->
-      <div class="flex justify-center space-x-4 border-b">
-        <button
-          (click)="setActiveTab('create')"
-          [class]="tabClass('create')"
-          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black transition-all duration-200 ease-in-out transform hover:scale-105"
-        >
-          Add User
+  </div>
+
+  <!-- Tab Contents -->
+  <div class="tabs-content mt-8 space-y-8 w-full">
+
+    <div *ngIf="activeTab === 'create'" class="tab-content w-full md:w-3/4 mx-auto">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Add New User</h2>
+      <form [formGroup]="UserForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <div class="form-group">
+          <label for="UserName" class="block text-lg font-semibold text-gray-700">User Name</label>
+          <input id="UserName" formControlName="UserName" type="text" placeholder="User Name" class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+          <div *ngIf="UserForm.controls['UserName'].invalid && UserForm.controls['UserName'].touched" class="text-sm text-red-500">
+            User Name is required and should be at least 2 characters long.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="UserState" class="block text-lg font-semibold text-gray-700">State</label>
+          <input id="UserState" formControlName="UserState" type="text" placeholder="State" class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+          <div *ngIf="UserForm.controls['UserState'].invalid && UserForm.controls['UserState'].touched" class="text-sm text-red-500">
+            State is required and should be at least 2 characters long.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="UserCountry" class="block text-lg font-semibold text-gray-700">Country</label>
+          <input id="UserCountry" formControlName="UserCountry" type="text" placeholder="Country" class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+          <div *ngIf="UserForm.controls['UserCountry'].invalid && UserForm.controls['UserCountry'].touched" class="text-sm text-red-500">
+            Country is required and should be at least 2 characters long.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="postalCode" class="block text-lg font-semibold text-gray-700">Postal Code</label>
+          <input id="postalCode" formControlName="postalCode" type="text" placeholder="Postal Code" class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+          <div *ngIf="UserForm.controls['postalCode'].invalid && UserForm.controls['postalCode'].touched" class="text-sm text-red-500">
+            Invalid Postal Code format.
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="isSubmitting" class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold">
+          {{ isSubmitting ? 'Submitting...' : 'Submit' }}
         </button>
-        <button
-          (click)="setActiveTab('read')"
-          [class]="tabClass('read')"
-          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opaUser-50"
-        >
-          Show Users
-        </button>
-        <button
-          (click)="setActiveTab('update')"
-          [class]="tabClass('update')"
-          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opaUser-50"
-        >
-          Update User
-        </button>
-        <button
-          (click)="setActiveTab('delete')"
-          [class]="tabClass('delete')"
-          class="py-2 px-6 text-lg font-medium text-gray-700 hover:text-black focus:outline-none focus:ring-black focus:ring-opaUser-50"
-        >
-          Delete User
-        </button>
+      </form>
+    </div>
+    <!-- Show Users Tab -->
+    <div *ngIf="activeTab === 'read'" class="tab-content">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">List of Users</h2>
+      <input [(ngModel)]="searchQuery" type="text" placeholder="Search User" class="w-full p-3 border border-gray-300 rounded-lg mb-6" />
+
+      <!-- Cards Container -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Card for each user -->
+        <div *ngFor="let user of filteredUsers" class="bg-white hover:shadow-lg rounded-lg overflow-hidden border border-gray-200">
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ user.firstname }}</h3>
+            <p class="text-gray-700 mb-2"><strong>Email:</strong> {{ user.email }}</p>
+            <p class="text-gray-700 mb-4"><strong>Phone:</strong> {{ user.phone }}</p>
+
+            <!-- Actions -->
+            <div class="flex space-x-4">
+              <button (click)="onEditUser(user)" class="text-blue-600 hover:text-blue-900 py-1 px-3 border border-blue-600 rounded-lg text-sm">
+                Update
+              </button>
+              <button (click)="onDeleteUser(user.id)" class="text-red-600 hover:text-red-900 py-1 px-3 border border-red-600 rounded-lg text-sm">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-    <!-- Tab Contents -->
-    <div class="tabs-content mt-8 space-y-8 w-full">
-      <!-- Create Tab -->
-      <div *ngIf="activeTab === 'create'" class="tab-content w-full md:w-3/4 mx-auto">
-        <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Add New User</h2>
-        <form [formGroup]="UserForm" (ngSubmit)="onSubmit()" class="space-y-6">
-          <div class="form-group">
-            <label for="UserName" class="block text-lg font-semibold text-gray-700">User Name</label>
-            <input
-              id="UserName"
-              formControlName="UserName"
-              type="text"
-              placeholder="New York"
-              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-            />
-            <div *ngIf="UserForm.controls['UserName'].invalid && UserForm.controls['UserName'].touched" class="text-sm text-red-500">
-              User Name is required and should be at least 2 characters long.
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label for="UserState" class="block text-lg font-semibold text-gray-700">State</label>
-            <input
-              id="UserState"
-              formControlName="UserState"
-              type="text"
-              placeholder="NY"
-              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-            />
-            <div *ngIf="UserForm.controls['UserState'].invalid && UserForm.controls['UserState'].touched" class="text-sm text-red-500">
-              State is required and should be at least 2 characters long.
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label for="UserCountry" class="block text-lg font-semibold text-gray-700">Country</label>
-            <input
-              id="UserCountry"
-              formControlName="UserCountry"
-              type="text"
-              placeholder="United States"
-              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-            />
-            <div *ngIf="UserForm.controls['UserCountry'].invalid && UserForm.controls['UserCountry'].touched" class="text-sm text-red-500">
-              Country is required and should be at least 2 characters long.
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label for="postalCode" class="block text-lg font-semibold text-gray-700">Postal Code</label>
-            <input
-              id="postalCode"
-              formControlName="postalCode"
-              type="text"
-              placeholder="10001"
-              class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-            />
-            <div *ngIf="UserForm.controls['postalCode'].invalid && UserForm.controls['postalCode'].touched" class="text-sm text-red-500">
-              Invalid Postal Code format.
-            </div>
-          </div>
-  
+
+    <!-- Update User Tab -->
+    <div *ngIf="activeTab === 'update'" class="tab-content w-full md:w-3/4 mx-auto">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Update User</h2>
+      <form [formGroup]="UserForm" (ngSubmit)="updateUser()" class="space-y-6">
+        <!-- User ID (hidden in the form) -->
+        <div class="form-group">
+          <label for="user_id" class="block text-lg font-semibold text-gray-700">User ID</label>
+          <input id="user_id" formControlName="user_id" type="text" class="form-input w-full p-3 border border-gray-300 rounded-lg" [readonly]="true"/>
+        </div>
+
+        <!-- User Name -->
+        <div class="form-group">
+          <label for="UserName" class="block text-lg font-semibold text-gray-700">User Name</label>
+          <input id="UserName" formControlName="UserName" type="text" class="form-input w-full p-3 border border-gray-300 rounded-lg"/>
+        </div>
+
+        <!-- User Email -->
+        <div class="form-group">
+          <label for="email" class="block text-lg font-semibold text-gray-700">Email</label>
+          <input id="email" formControlName="email" type="email" class="form-input w-full p-3 border border-gray-300 rounded-lg"/>
+        </div>
+
+        <!-- User Phone -->
+        <div class="form-group">
+          <label for="phone" class="block text-lg font-semibold text-gray-700">Phone</label>
+          <input id="phone" formControlName="phone" type="text" class="form-input w-full p-3 border border-gray-300 rounded-lg"/>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group">
           <button type="submit" [disabled]="isSubmitting" class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold">
-            {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+             Update User
           </button>
-        </form>
-      </div>
-  
-      <!-- Read Tab -->
-      <div *ngIf="activeTab === 'read'" class="tab-content w-full md:w-3/4 mx-auto">
-        <h2 class="text-2xl font-semibold text-gray-900 mb-4">User List</h2>
-        <ul *ngIf="Users.length > 0" class="space-y-2">
-          <li *ngFor="let User of Users" class="border p-4 rounded-lg shadow-sm">
-            <p class="text-lg font-semibold">{{ User.UserName }}</p>
-            <p class="text-gray-600">{{ User.UserState }}, {{ User.UserCountry }} - {{ User.postalCode }}</p>
-          </li>
-        </ul>
-        <p *ngIf="Users.length === 0" class="text-gray-600">No Users available.</p>
-      </div>
-  
-      <!-- Update Tab -->
-      <div *ngIf="activeTab === 'update'" class="tab-content w-full md:w-3/4 mx-auto">
-        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Update User</h2>
-        <p class="text-gray-600">Select a User to update its details.</p>
-      </div>
-  
-      <!-- Delete Tab -->
-      <div *ngIf="activeTab === 'delete'" class="tab-content w-full md:w-3/4 mx-auto">
-        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Delete User</h2>
-        <p class="text-gray-600">Select a User to delete from the list.</p>
-      </div>
+        </div>
+      </form>
     </div>
   </div>
-  
+</div>

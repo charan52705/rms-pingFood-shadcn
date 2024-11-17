@@ -1,13 +1,23 @@
+// menu.service.ts
 import { Injectable } from '@angular/core';
-import axios from 'axios';
-import { Observable, from, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import axios, { AxiosResponse } from 'axios';
 
+// Menu Interface
 export interface Menu {
-  name: string;
-  description: string;
-  price: number;
-  category: string;  // Added a category field for illustration
+  _id: string;
+  menu_id: number;
+  menu_name: string;
+  menu_description: string;
+  menu_type: string;
+  menu_added: string;
+  menu_active: boolean;
+  restaurant_id: string;
+  branch_id: number;
+  item_id: number;
+  item_name: string;
+  item_description: string;
+  item_price: number;
+  item_active: boolean;
 }
 
 @Injectable({
@@ -15,47 +25,47 @@ export interface Menu {
 })
 export class MenuService {
 
-  private apiUrl = 'https:/api/Menu';  // Assuming the API for Menu
+  private apiUrl = 'http://localhost:8000';  // Replace this with your actual API URL
 
-  constructor() { }
+  constructor() {}
 
-  // Get all menu items
-  getMenuItems(): Observable<Menu[]> {
-    return from(axios.get<Menu[]>(this.apiUrl).then(response => response.data))
-      .pipe(
-        catchError(this.handleError<Menu[]>('getMenuItems', []))
-      );
+  // Fetch all menu items
+  getMenuItems() {
+    return axios.get<Menu[]>(`${this.apiUrl}/menu-items`)
+      .then((response: AxiosResponse<Menu[]>) => response.data)
+      .catch((error) => {
+        console.error('Error fetching menu items:', error);
+        throw error;
+      });
   }
 
   // Add a new menu item
-  addMenuItem(menu: Menu): Observable<Menu> {
-    return from(axios.post<Menu>(this.apiUrl, menu).then(response => response.data))
-      .pipe(
-        catchError(this.handleError<Menu>('addMenuItem'))
-      );
+  addMenuItem(menu: Menu) {
+    return axios.post<Menu>(`${this.apiUrl}/create-menu-item`, menu)
+      .then((response: AxiosResponse<Menu>) => response.data)
+      .catch((error) => {
+        console.error('Error adding menu item:', error);
+        throw error;
+      });
   }
 
   // Update an existing menu item
-  updateMenuItem(menu: Menu): Observable<Menu> {
-    return from(axios.put<Menu>(`${this.apiUrl}/${menu.name}`, menu).then(response => response.data))
-      .pipe(
-        catchError(this.handleError<Menu>('updateMenuItem'))
-      );
+  updateMenuItem(menu: Menu) {
+    return axios.put<Menu>(`${this.apiUrl}/menu-item/${menu.menu_id}`, menu)
+      .then((response: AxiosResponse<Menu>) => response.data)
+      .catch((error) => {
+        console.error('Error updating menu item:', error);
+        throw error;
+      });
   }
 
-  // Delete a menu item by name
-  deleteMenuItem(name: string): Observable<{}> {
-    return from(axios.delete(`${this.apiUrl}/${name}`).then(() => ({})))
-      .pipe(
-        catchError(this.handleError<{}>('deleteMenuItem'))
-      );
-  }
-
-  // Error handling function
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
-      return of(result as T);
-    };
+  // Delete a menu item
+  deleteMenuItem(menuId: string) {
+    return axios.delete<void>(`${this.apiUrl}/menu-item/${menuId}`)
+      .then((response: AxiosResponse<void>) => response.data)
+      .catch((error) => {
+        console.error('Error deleting menu item:', error);
+        throw error;
+      });
   }
 }

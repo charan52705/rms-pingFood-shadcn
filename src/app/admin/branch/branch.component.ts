@@ -27,6 +27,8 @@ export class BranchComponent implements OnInit {
     this.createBranchForm();
     this.getBranches(); // Fetch branches when the component is initialized
   }
+
+  // Generate random integer for branch_id
   generateRandomBranchId(): number {
     const MAX = 1e9 + 7;
     return Math.floor(Math.random() * MAX) + 1; // Generate random integer between 1 and MAX
@@ -35,7 +37,7 @@ export class BranchComponent implements OnInit {
   // Create the form for adding and updating a branch
   createBranchForm() {
     this.branchForm = this.fb.group({
-      branch_id: [this.generateRandomBranchId(), [Validators.required]],  // Generate a new UUID for branch_id
+      branch_id: [this.generateRandomBranchId(), [Validators.required]],  // Generate a random integer for branch_id
       branch_name: ['', [Validators.required, Validators.minLength(2)]],
       branch_email: ['', [Validators.required, Validators.email]],
       branch_phone: ['', [Validators.required]], // Phone should be string, but may need conversion for numeric services
@@ -43,7 +45,7 @@ export class BranchComponent implements OnInit {
       branch_desc: ['', [Validators.required]],
       branch_added: [this.todayDate, [Validators.required]], // Set current date by default
       branch_active: [false, [Validators.required]], // This should be a boolean
-      restaurant_id: [uuidv4(), [Validators.required]], // Generate UUID for restaurant_id
+      restaurants_id: [uuidv4(), [Validators.required]], // Use 'restaurants_id' to match the API field name
       address_id: [uuidv4(), [Validators.required]], // Generate UUID for address_id
     });
   }
@@ -97,9 +99,9 @@ export class BranchComponent implements OnInit {
     console.log(formData);
 
     // Ensure UUIDs are present for the required fields
-    if (!formData.branch_id) formData.branch_id = uuidv4();
-    if (!formData.restaurant_id) formData.restaurant_id = uuidv4();
-    if (!formData.address_id) formData.address_id = uuidv4();
+    if (!formData.branch_id) formData.branch_id = this.generateRandomBranchId(); // Ensure branch_id is generated
+    if (!formData.restaurants_id) formData.restaurants_id = uuidv4(); // Ensure restaurants_id is present
+    if (!formData.address_id) formData.address_id = uuidv4(); // Ensure address_id is generated
 
     // Convert string values to the appropriate type where necessary
     if (formData.branch_active === 'true') {
@@ -138,7 +140,7 @@ export class BranchComponent implements OnInit {
       branch_desc: branch.branch_desc,
       branch_added: branch.branch_added,
       branch_active: branch.branch_active,
-      restaurant_id: branch.restaurant_id,
+      restaurants_id: branch.restaurant_id, 
       address_id: branch.address_id,
     });
     this.setActiveTab('update');
@@ -159,9 +161,9 @@ export class BranchComponent implements OnInit {
     const formData = { ...this.branchForm.value };
 
     // Ensure UUIDs are present for the required fields
-    if (!formData.branch_id) formData.branch_id = uuidv4();
-    if (!formData.restaurant_id) formData.restaurant_id = uuidv4();
-    if (!formData.address_id) formData.address_id = uuidv4();
+    if (!formData.branch_id) formData.branch_id = this.generateRandomBranchId(); // Ensure branch_id is generated
+    if (!formData.restaurants_id) formData.restaurants_id = uuidv4(); // Ensure restaurants_id is present
+    if (!formData.address_id) formData.address_id = uuidv4(); // Ensure address_id is generated
 
     // Convert string values to the appropriate type where necessary
     if (formData.branch_active === 'true') {

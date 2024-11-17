@@ -23,7 +23,6 @@ export const routes: Routes = [
   { path: 'admin/cities', loadComponent: () => import('./admin/cities/cities.component').then(m => m.CitiesComponent), canActivate: [AdminGuard] },
   { path: 'admin/items', loadComponent: () => import('./admin/items/items.component').then(m => m.ItemsComponent), canActivate: [AdminGuard] },
   { path: 'admin/menu', loadComponent: () => import('./admin/menu/menu.component').then(m => m.MenuComponent), canActivate: [AdminGuard] },
-  { path: 'admin/restaurant', loadComponent: () => import('./admin/restaurant/restaurant.component').then(m => m.RestaurantComponent), canActivate: [AdminGuard] },
   { path: 'admin/units', loadComponent: () => import('./admin/units/units.component').then(m => m.UnitsComponent), canActivate: [AdminGuard] },
   { path: 'admin/users', loadComponent: () => import('./admin/users/users.component').then(m => m.UsersComponent), canActivate: [AdminGuard] },
   { path: 'admin/customers', loadComponent: () => import('./admin/customers/customers.component').then(m => m.CustomersComponent), canActivate: [AdminGuard] },
