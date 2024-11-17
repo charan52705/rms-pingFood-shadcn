@@ -1,83 +1,91 @@
+
+
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { Observable, of } from 'rxjs';
 
+const BASE_URL = 'http://localhost:8000'
 
 export interface Order {
-  id: number;
-  customerName: string;
-  orderDate: string;  // YYYY-MM-DD
-  orderTotal: number;
-  orderStatus: string;  // E.g., 'Pending', 'Shipped', 'Delivered'
-  items: Array<{ productId: number, productName: string, quantity: number, price: number }>;
+  order_id: string;  
+  customer: {
+    name: string;
+    phone: string;
+    email: string;
+  };
+  order_date: string;
+  total_price: number;
+  order_status: string;
+  order_type: string;
+  payment_method: string;
+  store: {
+    store_id: string;
+    store_name: string;
+    store_address: string;
+    store_phone: string;
+  };
+  items: Array<{
+    product_id: number;
+    quantity: number;
+    price: number;
+  }>;
 }
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root' 
 })
-export class OrdersService {
-  private apiUrl = 'https://your-api-endpoint.com/orders'; // Replace with your actual API URL
+export class OrderService {
 
-  constructor() { }
-
-  // Get all orders (GET request)
-  getOrders(): Observable<Order[]> {
-    return new Observable((observer) => {
-      axios.get(this.apiUrl)
-        .then(response => {
-          observer.next(response.data); // Assuming the response is in 'data'
-          observer.complete();
-        })
-        .catch(error => {
-          console.error('Error fetching orders:', error);
-          observer.error('Error fetching orders');
-        });
-    });
+  
+  async getAllOrders(): Promise<Order[]> {
+    try {
+      const response = await axios.get(`${BASE_URL}/orders/`);
+      return response.data; 
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      throw error;
+    }
   }
 
-  // Create a new order (POST request)
-  createOrder(order: Order): Observable<Order> {
-    return new Observable((observer) => {
-      axios.post(this.apiUrl, order)
-        .then(response => {
-          observer.next(response.data); // Assuming the response contains the created order
-          observer.complete();
-        })
-        .catch(error => {
-          console.error('Error creating order:', error);
-          observer.error('Error creating order');
-        });
-    });
+  
+  async getOrderById(orderId: string): Promise<Order> {
+    try {
+      const response = await axios.get(`${BASE_URL}/order/${orderId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching order with ID ${orderId}:`, error);
+      throw error;
+    }
   }
 
-  // Update an existing order (PUT request)
-  updateOrder(updatedOrder: Order): Observable<Order> {
-    return new Observable((observer) => {
-      axios.put(`${this.apiUrl}/${updatedOrder.id}`, updatedOrder)
-        .then(response => {
-          observer.next(response.data); // Assuming the response contains the updated order
-          observer.complete();
-        })
-        .catch(error => {
-          console.error('Error updating order:', error);
-          observer.error('Error updating order');
-        });
-    });
+  
+  async createOrder(orderData: Order): Promise<Order> {
+    try {
+      const response = await axios.post(`${BASE_URL}/create-order/`, orderData);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating order:', error);
+      throw error;
+    }
   }
 
-  // Delete an order (DELETE request)
-  deleteOrder(id: number): Observable<void> {
-    return new Observable((observer) => {
-      axios.delete(`${this.apiUrl}/${id}`)
-        .then(() => {
-          observer.next();
-          observer.complete();
-        })
-        .catch(error => {
-          console.error('Error deleting order:', error);
-          observer.error('Error deleting order');
-        });
-    });
+  
+  async updateOrder(orderId: string, orderData: Order): Promise<Order> {
+    try {
+      const response = await axios.put(`${BASE_URL}/order/${orderId}`, orderData);
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating order with ID ${orderId}:`, error);
+      throw error;
+    }
+  }
+
+  
+  async deleteOrder(orderId: string): Promise<void> {
+    try {
+      await axios.delete(`${BASE_URL}/order/${orderId}`);
+    } catch (error) {
+      console.error(`Error deleting order with ID ${orderId}:`, error);
+      throw error;
+    }
   }
 }

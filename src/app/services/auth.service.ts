@@ -33,6 +33,8 @@ export class AuthService {
 
       if (response.status === 200) {
         console.log('User data:', response.data);
+        localStorage.setItem('User Data', JSON.stringify(response.data))
+        console.log(localStorage)
         const role = response.data.role;
         this.userRole.next(role);
         this.login(role)
@@ -72,7 +74,9 @@ export class AuthService {
   }
 
   setUserType(userTypes:string) : void {
+    
     this.userType = userTypes
+    console.log(this.userType)
   }
 
   logout(): void {
@@ -86,7 +90,8 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    return this.userRole.getValue() === 'admin';
+    console.log(this.userRole.getValue())
+    return this.userRole.getValue() === 'Admin';
   }
 
   isCustomer(): boolean {
@@ -96,4 +101,9 @@ export class AuthService {
   isAuthenticated(): boolean {
     return this.userRole.getValue() !== null;
   }
+  isMatchingRoleandType():boolean {
+    console.log(this.userRole.getValue(), this.userType)
+    return (this.userRole.getValue() === this.userType)
+  }
+  
 }

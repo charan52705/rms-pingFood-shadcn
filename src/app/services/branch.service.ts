@@ -1,40 +1,60 @@
+// src/app/services/branch.service.ts
 import { Injectable } from '@angular/core';
-import axios from 'axios';  // Import axios for HTTP requests
-import { Observable, from } from 'rxjs';
+import axios from 'axios';
 
-
+const BASE_URL = 'http://localhost:8000'; // Replace with your API base URL
 export interface Branch {
-  id: number;
-  branchName: string;
-  branchLocation: string;
-  branchManager: string;
+  branch_id: number;
+  branch_name: string;
+  branch_email: string;
+  branch_phone: string;
+  branch_website: string;
+  branch_desc: string;
+  branch_added: string;
+  branch_active: boolean;
+  restaurant_id: string;
+  address_id: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class BranchService {
-  private apiUrl = 'https://api.example.com/branches';  // Replace with your actual API URL
 
-  constructor() {}
+  constructor() { }
 
-  // Get list of branches
-  getBranches(): Observable<Branch[]> {
-    return from(axios.get(this.apiUrl).then((response) => response.data));
+  createBranch(branchData: any) {
+    return axios.post(`${BASE_URL}/create-branch/`, branchData)
+      .then(response => response.data)
+      .catch(this.handleError);
   }
 
-  // Create a new branch
-  createBranch(branch: Branch): Observable<Branch> {
-    return from(axios.post(this.apiUrl, branch).then((response) => response.data));
+  getBranch(branchId: number) {
+    return axios.get(`${BASE_URL}/branch/${branchId}`)
+      .then(response => response.data)
+      .catch(this.handleError);
   }
 
-  // Update an existing branch
-  updateBranch(id: number, branch: Branch): Observable<Branch> {
-    return from(axios.put(`${this.apiUrl}/${id}`, branch).then((response) => response.data));
+  updateBranch(branchId: number, branchData: any) {
+    return axios.put(`${BASE_URL}/branch/${branchId}`, branchData)
+      .then(response => response.data)
+      .catch(this.handleError);
   }
 
-  // Delete a branch
-  deleteBranch(branchName: string): Observable<void> {
-    return from(axios.delete(`${this.apiUrl}/${branchName}`).then(() => {}));
+  deleteBranch(branchId: number) {
+    return axios.delete(`${BASE_URL}/branch/${branchId}`)
+      .then(response => response.data)
+      .catch(this.handleError);
+  }
+
+  getAllBranches() {
+    return axios.get(`${BASE_URL}/branches/`)
+      .then(response => response.data)
+      .catch(this.handleError);
+  }
+
+  private handleError(error: any) {
+    console.error('API Error: ', error);
+    throw new Error(error.response?.data?.detail || 'An error occurred');
   }
 }
