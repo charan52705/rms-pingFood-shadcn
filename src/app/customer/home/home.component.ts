@@ -15,7 +15,7 @@ export class HomeComponent {
 
   userRole:string = ''
 
-  isUserMenuVisible = true
+  isUserMenuVisible = false
 
   constructor(private authService:AuthService){}
 
