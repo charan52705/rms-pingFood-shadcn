@@ -1,136 +1,150 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ToastrService, ToastrModule } from 'ngx-toastr'; 
-import { Address, AddressService } from '../../services/address.service';
-
+import { AddressService, Address } from '../../services/address.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-address',
-  standalone: true,
-  imports: [
-    FormsModule,
-    CommonModule,
-    ReactiveFormsModule,
-  ],
+  standalone:true,
+  imports:[CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './address.component.html',
-  styleUrls: ['./address.component.css']  
+  styleUrls: ['./address.component.css'],
 })
-export class AddressComponent {
-  addressForm: FormGroup;
-  isSubmitting: boolean = false;
-  activeTab: string = 'create'; // Default tab
-  isMenuOpen: boolean = false;
+export class AddressComponent implements OnInit {
+  isMenuOpen = false;
+  activeTab: string = 'create'; 
+  addressForm!: FormGroup;
   addresses: Address[] = [];
+  isSubmitting: boolean = false;
+  selectedAddress: Address | null = null;
 
-  constructor(private fb: FormBuilder, private addressService: AddressService) {
-    this.addressForm = this.fb.group({
-      street: ['', Validators.required],
-      city: ['', Validators.required],
-      state: ['', Validators.required],
-      postalCode: ['', Validators.required],
-      country: ['', Validators.required],
-    });
-  }
+  constructor(
+    private fb: FormBuilder,
+    private addressService: AddressService
+  ) {}
 
   ngOnInit(): void {
-    this.loadAddresses();
+    this.addressForm = this.fb.group({
+      id: [0],
+      name: ['', Validators.required],
+      doorno: ['', Validators.required],
+      street_no: ['', Validators.required],
+      landmark: [''],
+      address_line_1: ['', Validators.required],
+      address_line_2: [''],
+      city: ['', Validators.required],
+      state: ['', Validators.required],
+      country: ['', Validators.required],
+      pincode: ['', [Validators.required, Validators.pattern(/^[0-9]{6}$/)]],
+    });
+
+    this.getAddresses();
   }
 
-  // Load all addresses
-  loadAddresses(): void {
-    this.addressService.getAddresses().subscribe(
-      (addresses) => {
-        this.addresses = addresses;
-      },
-      (error) => {
-        console.error('Error fetching addresses:', error);
-      }
-    );
-  }
-
-  // Handle form submission for adding or updating an address
-  onSubmit(): void {
-    if (this.addressForm.valid) {
-      this.isSubmitting = true;
-      const formData: Address = this.addressForm.value;
-
-      if (this.activeTab === 'create') {
-        this.addAddress(formData);
-      } else if (this.activeTab === 'update') {
-        this.updateAddress(formData);
-      }
-    }
-  }
-
-  // Add a new address
-  addAddress(address: Address): void {
-    this.addressService.addAddress(address).subscribe(
-      (newAddress) => {
-        this.addresses.push(newAddress); // Add the new address to the list
-        this.addressForm.reset(); // Reset form
-        this.setActiveTab('read'); // Switch to the 'read' tab
-      },
-      (error) => {
-        console.error('Error adding address:', error);
-      }
-    );
-  }
-
-  // Update an existing address
-  updateAddress(address: Address): void {
-    this.addressService.updateAddress(address).subscribe(
-      (updatedAddress) => {
-        const index = this.addresses.findIndex(
-          (existingAddress) => existingAddress.street === updatedAddress.street
-        );
-        if (index !== -1) {
-          this.addresses[index] = updatedAddress; // Update the address in the list
-        }
-        this.addressForm.reset(); // Reset form
-        this.setActiveTab('read'); // Switch to the 'read' tab
-      },
-      (error) => {
-        console.error('Error updating address:', error);
-      }
-    );
-  }
-
-  // Delete an address
-  deleteAddress(street: string): void {
-    this.addressService.deleteAddress(street).subscribe(
-      () => {
-        this.addresses = this.addresses.filter(
-          (address) => address.street !== street
-        ); // Remove the deleted address
-      },
-      (error) => {
-        console.error('Error deleting address:', error);
-      }
-    );
-  }
-
-  // Toggle the menu for mobile view
+  
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  // Set the active tab for navigation
+  
   setActiveTab(tab: string): void {
     this.activeTab = tab;
-    this.isMenuOpen = false; // Close mobile menu after tab selection
   }
 
-  // Determine the active tab's CSS class
+  
+  getAddresses(): void {
+    this.addressService.getAllAddresses().subscribe(
+      (data) => {
+        this.addresses = data;
+      },
+      (error) => {
+        console.error('Error fetching addresses', error);
+      }
+    );
+  }
+
+  
+  onSubmit(): void {
+    if (this.addressForm.invalid) {
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    this.addressService.createAddress(this.addressForm.value).subscribe(
+      (data) => {
+        console.log('Address created successfully:', data);
+        this.isSubmitting = false;
+        this.getAddresses(); 
+        this.addressForm.reset();
+      },
+      (error) => {
+        console.error('Failed to create address', error);
+        this.isSubmitting = false;
+      }
+    );
+  }
+
+  
+  selectAddress(address: Address): void {
+    this.selectedAddress = address;
+    this.addressForm.setValue({
+      id: address.id,
+      name: address.name,
+      doorno: address.doorno,
+      street_no: address.street_no,
+      landmark: address.landmark,
+      address_line_1: address.address_line_1,
+      address_line_2: address.address_line_2,
+      city: address.city,
+      state: address.state,
+      country: address.country,
+      pincode: address.pincode,
+    });
+  }
+
+  
+  updateAddress(): void {
+    if (this.addressForm.invalid || !this.selectedAddress) {
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    this.addressService.updateAddress(this.selectedAddress.id, this.addressForm.value).subscribe(
+      (data) => {
+        console.log('Address updated successfully:', data);
+        this.isSubmitting = false;
+        this.getAddresses(); 
+        this.addressForm.reset();
+        this.selectedAddress = null;
+      },
+      (error) => {
+        console.error('Failed to update address', error);
+        this.isSubmitting = false;
+      }
+    );
+  }
+
+  
+  deleteAddress(addressId: number): void {
+    if (confirm('Are you sure you want to delete this address?')) {
+      this.addressService.deleteAddress(addressId).subscribe(
+        (data) => {
+          console.log('Address deleted successfully', data);
+          this.getAddresses(); 
+        },
+        (error) => {
+          console.error('Failed to delete address', error);
+        }
+      );
+    }
+  }
+
+  
   tabClass(tab: string): string {
     return this.activeTab === tab
-      ? 'text-black border-b-2 border-black'
-      : 'text-gray-700';
-  }
-
-  // Select an address to update in the form
-  selectAddressForUpdate(address: Address): void {
-    this.addressForm.patchValue(address); // Populate form with the selected address
-    this.setActiveTab('update'); // Switch to 'update' tab
+      ? 'py-2 px-6 text-lg font-medium text-gray-700 border-b-2 border-black'
+      : 'py-2 px-6 text-lg font-medium text-gray-700';
   }
 }

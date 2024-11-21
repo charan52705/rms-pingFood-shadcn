@@ -1,70 +1,71 @@
+// src/app/services/address.service.ts
+
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { Observable, from, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
-
-
+// src/app/models/address.model.ts
 export interface Address {
-  street: string;
+  id: number;
+  name: string;
+  doorno: string;
+  street_no: string;
+  landmark: string;
+  address_line_1: string;
+  address_line_2: string;
   city: string;
   state: string;
-  postalCode: string;
   country: string;
+  pincode: string;
 }
 
-
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AddressService {
-  private apiUrl = 'https:/api/addresses'; // Replace with your API URL
+  private apiUrl = 'http://localhost:8000'; // Replace with your API base URL
 
   constructor() {}
 
+  // Convert Axios Promise to Observable
+  private axiosToObservable(promise: Promise<any>): Observable<any> {
+    return from(promise).pipe(
+      catchError(error => {
+        throw error; // Forward error to the subscriber
+      })
+    );
+  }
+
+  // Create a new address
+  createAddress(address: Address): Observable<any> {
+    const promise = axios.post(`${this.apiUrl}/create-address/`, address);
+    return this.axiosToObservable(promise);
+  }
+
+  // Get address by id
+  getAddress(addressId: number): Observable<Address> {
+    const promise = axios.get(`${this.apiUrl}/address/${addressId}`);
+    return this.axiosToObservable(promise);
+  }
+
+  // Update an address
+  updateAddress(addressId: number, address: Address): Observable<any> {
+    const promise = axios.put(`${this.apiUrl}/address/${addressId}`, address);
+    return this.axiosToObservable(promise);
+  }
+
+  // Delete an address
+  deleteAddress(addressId: number): Observable<any> {
+    const promise = axios.delete(`${this.apiUrl}/address/${addressId}`);
+    return this.axiosToObservable(promise);
+  }
+
   // Get all addresses
-  getAddresses(): Observable<Address[]> {
-    return from(
-      axios.get<Address[]>(this.apiUrl).then((response) => response.data)
-    ).pipe(
-      catchError(this.handleError<Address[]>('getAddresses', []))
+  getAllAddresses(): Observable<Address[]> {
+    const promise = axios.get(`${this.apiUrl}/addresses/`);
+    return this.axiosToObservable(promise).pipe(
+      map((data: Address[]) => data) // Optional: Add any data transformation here
     );
-  }
-
-  // Add a new address
-  addAddress(address: Address): Observable<Address> {
-    return from(
-      axios.post<Address>(this.apiUrl, address).then((response) => response.data)
-    ).pipe(
-      catchError(this.handleError<Address>('addAddress'))
-    );
-  }
-
-  // Update an existing address
-  updateAddress(address: Address): Observable<Address> {
-    return from(
-      axios.put<Address>(`${this.apiUrl}/${address.street}`, address).then(
-        (response) => response.data
-      )
-    ).pipe(
-      catchError(this.handleError<Address>('updateAddress'))
-    );
-  }
-
-  // Delete an address by street name (or unique identifier)
-  deleteAddress(street: string): Observable<{}> {
-    return from(
-      axios.delete(`${this.apiUrl}/${street}`).then(() => ({}))
-    ).pipe(
-      catchError(this.handleError<{}>('deleteAddress'))
-    );
-  }
-
-  // Handle HTTP errors
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
-      return of(result as T); // Return an empty result for safe handling
-    };
   }
 }

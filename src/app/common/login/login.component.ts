@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,8 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  userType: string = 'customer'; 
+  userType: string = 'Customer'; 
+  isLoading: boolean = false;  
 
   constructor(
     private fb: FormBuilder,
@@ -25,38 +27,35 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      userType: ['customer', Validators.required], 
+      userType: ['customer', Validators.required],  
     });
   }
 
-  
   onSubmit() {
     if (this.loginForm.valid) {
       const { email, password, userType } = this.loginForm.value;
+
+      this.isLoading = true;  
 
       
       this.authService.getUserData(email).then(
         (userData) => {
           this.authService.setUserType(userType);
 
-          const confirmation = this.authService.isMatchingRoleandType();
-
-          if (confirmation) {
-           
-            if (userType === 'Customer') {
-              console.log('Navigating to customer home');
-              this.authService.login(userData)
-              this.router.navigate(['/customer/home']); 
-            } else if (userType === 'Admin') {
-              console.log('Navigating to admin home');
-              this.router.navigate(['/admin/home']); 
-            }
+          
+          if (userData && userData.role) {
+            
+            this.redirectBasedOnRole(userData.role);
           } else {
-            this.handleError('Role and user type do not match. Please check your credentials.');
+            
+            this.handleError('Invalid user data or role not found.');
           }
+
+          this.isLoading = false; 
         },
         (error) => {
           this.handleError('An error occurred while authenticating. Please try again later.');
+          this.isLoading = false; 
         }
       );
     } else {
@@ -68,9 +67,24 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['/common/register']);
   }
 
+  private redirectBasedOnRole(role: string) {
+    if (role === 'customer') {
+      console.log('Navigating to customer home');
+      this.authService.login(role);  
+      this.router.navigate(['/customer/home']);
+    } else if (role === 'Admin') {
+      console.log('Navigating to admin home');
+      this.authService.login(role);  
+      this.router.navigate(['/admin/home']);
+    } else {
+      this.handleError('Unauthorized role.');
+    }
+  }
+
   
   private handleError(message: string) {
-    alert(message); 
-    console.error(message); 
+    
+    alert(message);
+    console.error(message);
   }
 }

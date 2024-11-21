@@ -69,80 +69,160 @@
     <div *ngIf="activeTab === 'create'" class="tab-content w-full md:w-3/4 mx-auto">
       <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">Add New Address</h2>
       <form [formGroup]="addressForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <!-- Name -->
         <div class="form-group">
-          <label for="street" class="block text-lg font-semibold text-gray-700">Street</label>
+          <label for="name" class="block text-lg font-semibold text-gray-700">Name</label>
           <input
-            id="street"
-            formControlName="street"
+            id="name"
+            formControlName="name"
             type="text"
-            placeholder="Street Address"
+            placeholder="Enter Name"
             class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
           />
-          <div *ngIf="addressForm.controls['street'].invalid && addressForm.controls['street'].touched" class="text-sm text-red-500">
-            Street is required.
+          <div *ngIf="addressForm.controls['name'].invalid && addressForm.controls['name'].touched" class="text-sm text-red-500">
+            Name is required.
           </div>
         </div>
-
+      
+        <!-- Door Number -->
+        <div class="form-group">
+          <label for="doorno" class="block text-lg font-semibold text-gray-700">Door Number</label>
+          <input
+            id="doorno"
+            formControlName="doorno"
+            type="text"
+            placeholder="Enter Door Number"
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+          />
+          <div *ngIf="addressForm.controls['doorno'].invalid && addressForm.controls['doorno'].touched" class="text-sm text-red-500">
+            Door number is required.
+          </div>
+        </div>
+      
+        <!-- Street Number -->
+        <div class="form-group">
+          <label for="street_no" class="block text-lg font-semibold text-gray-700">Street Number</label>
+          <input
+            id="street_no"
+            formControlName="street_no"
+            type="text"
+            placeholder="Enter Street Number"
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+          />
+          <div *ngIf="addressForm.controls['street_no'].invalid && addressForm.controls['street_no'].touched" class="text-sm text-red-500">
+            Street number is required.
+          </div>
+        </div>
+      
+        <!-- Landmark -->
+        <div class="form-group">
+          <label for="landmark" class="block text-lg font-semibold text-gray-700">Landmark</label>
+          <input
+            id="landmark"
+            formControlName="landmark"
+            type="text"
+            placeholder="Enter Landmark (Optional)"
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+          />
+        </div>
+      
+        <!-- Address Line 1 -->
+        <div class="form-group">
+          <label for="address_line_1" class="block text-lg font-semibold text-gray-700">Address Line 1</label>
+          <input
+            id="address_line_1"
+            formControlName="address_line_1"
+            type="text"
+            placeholder="Enter Address Line 1"
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+          />
+          <div *ngIf="addressForm.controls['address_line_1'].invalid && addressForm.controls['address_line_1'].touched" class="text-sm text-red-500">
+            Address Line 1 is required.
+          </div>
+        </div>
+      
+        <!-- Address Line 2 -->
+        <div class="form-group">
+          <label for="address_line_2" class="block text-lg font-semibold text-gray-700">Address Line 2</label>
+          <input
+            id="address_line_2"
+            formControlName="address_line_2"
+            type="text"
+            placeholder="Enter Address Line 2 (Optional)"
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+          />
+        </div>
+      
+        <!-- City -->
         <div class="form-group">
           <label for="city" class="block text-lg font-semibold text-gray-700">City</label>
           <input
             id="city"
             formControlName="city"
             type="text"
-            placeholder="City"
+            placeholder="Enter City"
             class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
           />
           <div *ngIf="addressForm.controls['city'].invalid && addressForm.controls['city'].touched" class="text-sm text-red-500">
             City is required.
           </div>
         </div>
-
+      
+        <!-- State -->
         <div class="form-group">
           <label for="state" class="block text-lg font-semibold text-gray-700">State</label>
           <input
             id="state"
             formControlName="state"
             type="text"
-            placeholder="State"
+            placeholder="Enter State"
             class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
           />
           <div *ngIf="addressForm.controls['state'].invalid && addressForm.controls['state'].touched" class="text-sm text-red-500">
             State is required.
           </div>
         </div>
-
-        <div class="form-group">
-          <label for="postalCode" class="block text-lg font-semibold text-gray-700">Postal Code</label>
-          <input
-            id="postalCode"
-            formControlName="postalCode"
-            type="text"
-            placeholder="Postal Code"
-            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-          />
-          <div *ngIf="addressForm.controls['postalCode'].invalid && addressForm.controls['postalCode'].touched" class="text-sm text-red-500">
-            Postal Code is required.
-          </div>
-        </div>
-
+      
+        <!-- Country -->
         <div class="form-group">
           <label for="country" class="block text-lg font-semibold text-gray-700">Country</label>
           <input
             id="country"
             formControlName="country"
             type="text"
-            placeholder="Country"
+            placeholder="Enter Country"
             class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
           />
           <div *ngIf="addressForm.controls['country'].invalid && addressForm.controls['country'].touched" class="text-sm text-red-500">
             Country is required.
           </div>
         </div>
-
-        <button type="submit" [disabled]="isSubmitting" class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold">
+      
+        <!-- Pincode -->
+        <div class="form-group">
+          <label for="pincode" class="block text-lg font-semibold text-gray-700">Pincode</label>
+          <input
+            id="pincode"
+            formControlName="pincode"
+            type="text"
+            placeholder="Enter Pincode"
+            class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+          />
+          <div *ngIf="addressForm.controls['pincode'].invalid && addressForm.controls['pincode'].touched" class="text-sm text-red-500">
+            Pincode is required and must be 6 digits.
+          </div>
+        </div>
+      
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          [disabled]="isSubmitting"
+          class="w-full py-3 px-4 bg-black text-white rounded-lg font-semibold"
+        >
           {{ isSubmitting ? 'Submitting...' : 'Submit' }}
         </button>
       </form>
+      
     </div>
 
     <!-- Read Tab -->
@@ -150,8 +230,8 @@
       <h2 class="text-2xl font-semibold text-gray-900 mb-4">Address List</h2>
       <ul *ngIf="addresses.length > 0" class="space-y-2">
         <li *ngFor="let address of addresses" class="border p-4 rounded-lg shadow-sm">
-          <p class="text-lg font-semibold">{{ address.street }}</p>
-          <p class="text-gray-600">{{ address.city }}, {{ address.state }} - {{ address.postalCode }}</p>
+          <p class="text-lg font-semibold">{{ address.landmark }}</p>
+          <p class="text-gray-600">{{ address.city }}, {{ address.state }} - {{ address.pincode }}</p>
           <p class="text-gray-600">{{ address.country }}</p>
         </li>
       </ul>

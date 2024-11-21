@@ -15,15 +15,17 @@ export class HomeComponent {
 
   userRole:string = ''
 
+  isUserMenuVisible = true
+
   constructor(private authService:AuthService){}
 
   toggleMobileMenu() {
     this.isMobileMenuVisible = !this.isMobileMenuVisible;
   }
   featuredDishes = [
-    { name: "Truffle Risotto", description: "Creamy Arborio rice with black truffle and Parmesan" },
-    { name: "Seared Scallops", description: "Pan-seared scallops with cauliflower purée and bacon crumbs" },
-    { name: "Wagyu Steak", description: "A5 Wagyu beef with roasted vegetables and red wine jus" }
+    { name: "Truffle Risotto", description: "Creamy Arborio rice with black truffle and Parmesan" , image:'https://mipikale.com/wp-content/uploads/2021/12/truffle-risotto.jpg'},
+    { name: "Seared Scallops", description: "Pan-seared scallops with cauliflower purée and bacon crumbs", image:'https://www.foodandwine.com/thmb/TDK2MFuyi2mb4jH66Waf9i1XsNs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/seared-scallops-with-pomegranate-and-meyer-lemon-FT-RECIPE0321-7189303d38de41449c6b501c8663541c.jpg' },
+    { name: "Wagyu Steak", description: "A5 Wagyu beef with roasted vegetables and red wine jus", image:'https://www.foodandwine.com/thmb/TDK2MFuyi2mb4jH66Waf9i1XsNs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/seared-scallops-with-pomegranate-and-meyer-lemon-FT-RECIPE0321-7189303d38de41449c6b501c8663541c.jpg' }
   ];
 
 
@@ -54,6 +56,8 @@ export class HomeComponent {
   }
 
   logout() {
+    this.openUserMenu()
+    window.location.reload()
     this.authService.logout()
   }
 
@@ -67,6 +71,10 @@ export class HomeComponent {
   subscribeNewsletter(email: string) {
     console.log('Subscribing email:', email);
    
+  }
+  openUserMenu():boolean {
+    this.isUserMenuVisible = !this.isUserMenuVisible
+    return this.isUserMenuVisible
   }
 
 }

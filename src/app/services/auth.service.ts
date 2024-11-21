@@ -3,26 +3,34 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environment/environment';
 import axios from 'axios';
 
+const USER_ROLE_KEY = 'userRole'; 
+const USER_DATA_KEY = 'userData'; 
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private userRole: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
   private apiurl = environment.baseUrl;
-  private userType = ''
+  private userType = '';
 
   constructor() {
-    const storedRole = localStorage.getItem('userRole');
-    this.userRole.next(storedRole); 
+    this.initializeUserRole();
   }
 
+  
+  private initializeUserRole(): void {
+    const storedRole = localStorage.getItem(USER_ROLE_KEY);
+    if (storedRole && (storedRole === 'Admin' || storedRole === 'customer')) {
+      this.userRole.next(storedRole); 
+    }
+  }
+
+  
   async getUserData(email: string): Promise<any> {
-    console.log('Fetching user data for email:', email);
-    
-    
+    const decodedEmail = decodeURIComponent(email);
     const baseUrl = this.apiurl.endsWith('/') ? this.apiurl.slice(0, -1) : this.apiurl;
-    const url = `${baseUrl}/userData/${encodeURIComponent(email)}`;
-    console.log('API URL:', url);
+    const url = `${baseUrl}/userData/${decodedEmail}`;
 
     try {
       const response = await axios.get(url, {
@@ -31,18 +39,16 @@ export class AuthService {
         },
       });
 
-      if (response.status === 200) {
-        console.log('User data:', response.data);
-        localStorage.setItem('User Data', JSON.stringify(response.data))
-        console.log(localStorage)
-        const role = response.data.role;
-        this.userRole.next(role);
-        this.login(role)
+      if (response.status === 200 && response.data.role) {
+        const { role } = response.data;
+        this.userRole.next(role); 
+        localStorage.setItem(USER_DATA_KEY, JSON.stringify(response.data)); 
+        localStorage.setItem(USER_ROLE_KEY, role); 
+        this.login(role); 
         return response.data;
-
       } else {
-        console.error('Unexpected status code:', response.status);
-        return { success: false, message: 'Unexpected error occurred.' };
+        console.error('Failed to fetch user data or role is missing');
+        return { success: false, message: 'Error fetching user data.' };
       }
     } catch (error) {
       this.handleError(error);
@@ -53,57 +59,58 @@ export class AuthService {
     }
   }
 
+  
   private handleError(error: any): void {
-    console.error('An error occurred:', error);
+    console.error('Error occurred:', error);
 
     if (error.response) {
-      console.error('Response error:', error.response.data);
-      console.error('Response status:', error.response.status);
+      
+      console.error('API Response error:', error.response.data);
     } else if (error.request) {
-      console.error('Request error:', error.request);
+      
+      console.error('No response from server:', error.request);
     } else {
-      console.error('Error setting up request:', error.message);
+      
+      console.error('Error setting up the request:', error.message);
     }
   }
 
+  
   login(role: string): void {
-    
     this.userRole.next(role);
-    localStorage.setItem('userRole', role);
-    console.log('Logged in with role:', role);
+    localStorage.setItem(USER_ROLE_KEY, role);
   }
 
-  setUserType(userTypes:string) : void {
-    
-    this.userType = userTypes
-    console.log(this.userType)
+  
+  setUserType(userTypes: string): void {
+    this.userType = userTypes;
   }
 
+  
   logout(): void {
-    
     this.userRole.next(null);
-    localStorage.removeItem('userRole');
+    localStorage.removeItem(USER_ROLE_KEY);
+    localStorage.removeItem(USER_DATA_KEY); 
   }
 
+  
   getRole(): Observable<string | null> {
     return this.userRole.asObservable();
   }
 
+  
   isAdmin(): boolean {
-    console.log(this.userRole.getValue())
     return this.userRole.getValue() === 'Admin';
   }
 
+  
   isCustomer(): boolean {
     return this.userRole.getValue() === 'customer';
   }
 
+  
   isAuthenticated(): boolean {
     return this.userRole.getValue() !== null;
   }
-  isMatchingRoleandType():boolean {
-    console.log(this.userRole.getValue(), this.userType)
-    return (this.userRole.getValue() === this.userType)
-  }
-  
+
 }
